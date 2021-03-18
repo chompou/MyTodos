@@ -1,14 +1,36 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Objects;
 
+/**
+ * This class represents the list of tasks created by the user.
+ * Its only field is the arraylist of tasks.
+ */
 public class TaskRegistry {
-    private ArrayList<Task> taskList;
+    private ArrayList<Task> tasks;
 
     /**
      * This method creates a new tasks registry
      */
     public TaskRegistry() {
-        this.taskList = new ArrayList<Task>();
+        this.tasks = new ArrayList<Task>();
+    }
+
+    /**
+     * This method gets the arraylist of tasks.
+     * @return the arraylist of tasks
+     */
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * This method sets the arrayList of tasks.
+     * @param tasks the new arraylist of tasks.
+     */
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
     }
 
     /**
@@ -17,7 +39,7 @@ public class TaskRegistry {
      * @return true if the task was not in the list and was successfully registered. False if the task was already in the list.
      */
     public boolean registerTask(Task task){
-        if(taskList.contains(task)){
+        if(tasks.contains(task)){
             return true;
         } else {
             return false;
@@ -30,7 +52,7 @@ public class TaskRegistry {
      * @return true if the tasks was found and deleted, false if not
      */
     public boolean deleteTask(Task task){
-        if(taskList.remove(task)){
+        if(tasks.remove(task)){
             return true;
         } else {
             return false;
@@ -38,13 +60,13 @@ public class TaskRegistry {
     }
 
     /**
-     * This method takes in a comparator and uses it to sort the tasklist.
-     * @param comparator the comparator we are using to sort the taskslist with.
+     * This method takes in a comparator and uses it to sort the task list.
+     * @param comparator the comparator we are using to sort the task list with.
      * @return the sorted list
      */
     public ArrayList<Task> sortTasks(Comparator<Task> comparator){
         //not finished
-        return taskList;
+        return tasks;
     }
 
     /**
@@ -53,7 +75,7 @@ public class TaskRegistry {
      */
     public ArrayList<Task> filterTasks(){
         //not finished
-        return taskList;
+        return tasks;
     }
 
     /**
@@ -61,9 +83,46 @@ public class TaskRegistry {
      * @return true if they where deleted, false if not.
      */
     public boolean deleteFinishedTasks(){
-
+        Iterator<Task> i = tasks.iterator();
+        while(i.hasNext()){
+            Task task = i.next();
+            if (task.getStatus() == 3){
+                i.remove();
+            }
+        }
         return true;
     }
 
+    /**
+     * This method check if the taskregistry is equal to another object.
+     * @param o the object we are checking against
+     * @return true if the objects are equal. False if they are not.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskRegistry that = (TaskRegistry) o;
+        return Objects.equals(tasks, that.tasks);
+    }
 
+    /**
+     * This method generates hashCode for the taskRegistry.
+     * @return the hashcode for the object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(tasks);
+    }
+
+    /**
+     * This method returns the tostring of the taskRegistry, which shows all the values for all the fields.
+     * @return the tostring of the taskRegistry.
+     */
+    @Override
+    public String toString() {
+        return "TaskRegistry{" +
+                "tasks=" + tasks +
+                '}';
+    }
 }
