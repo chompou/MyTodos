@@ -1,14 +1,10 @@
-<<<<<<< src/main/java/TaskRegistry.java
-import enums.TaskStatus;
-
-=======
 import java.io.*;
-import enums.TaskStatus;
->>>>>>> src/main/java/TaskRegistry.java
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Objects;
+
+import enums.TaskStatus;
 
 /**
  * This class represents the list of tasks created by the user.
