@@ -1,3 +1,5 @@
+import enums.TaskStatus;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -86,7 +88,7 @@ public class TaskRegistry {
         Iterator<Task> i = tasks.iterator();
         while(i.hasNext()){
             Task task = i.next();
-            if (task.getStatus() == 3){
+            if (task.getStatus() == TaskStatus.COMPLETE){
                 i.remove();
             }
         }

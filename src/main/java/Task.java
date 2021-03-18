@@ -1,22 +1,24 @@
+import enums.TaskPriority;
+import enums.TaskStatus;
+
 import java.time.LocalDate;
 
 public class Task {
     private String description;
     private String category;
     private LocalDate deadline;
-    private int priority;
-    private int status;
+    private TaskPriority priority;
+    private TaskStatus status;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public Task(String description, String category, LocalDate deadline, int priority, int status, LocalDate startDate, LocalDate endDate) {
+    public Task(String description, String category, LocalDate deadline, TaskPriority priority) {
         this.description = description;
         this.category = category;
         this.deadline = deadline;
         this.priority = priority;
-        this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.status = TaskStatus.TODO;
+        this.startDate = LocalDate.now();
     }
 
     public String getDescription() {
@@ -43,15 +45,15 @@ public class Task {
         this.deadline = deadline;
     }
 
-    public int getPriority() {
+    public TaskPriority getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(TaskPriority priority) {
         this.priority = priority;
     }
 
-    public int getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
@@ -71,7 +73,7 @@ public class Task {
         this.endDate = endDate;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
