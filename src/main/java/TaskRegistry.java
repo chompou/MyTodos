@@ -1,5 +1,10 @@
+<<<<<<< src/main/java/TaskRegistry.java
 import enums.TaskStatus;
 
+=======
+import java.io.*;
+import enums.TaskStatus;
+>>>>>>> src/main/java/TaskRegistry.java
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -10,6 +15,7 @@ import java.util.Objects;
  * Its only field is the arraylist of tasks.
  */
 public class TaskRegistry {
+    final String RELATIVE_PATH = "tasks.todo";
     private ArrayList<Task> tasks;
 
     /**
@@ -93,6 +99,42 @@ public class TaskRegistry {
             }
         }
         return true;
+    }
+
+    /**
+     * This method writes the current ArrayList of Task objects to a file specified by the RELATIVE_PATH variable.
+     * @return true if ArrayList was successfully written to file, false if an IOException occurred.
+     * @throws IOException
+     */
+
+    public boolean writeTasksToFile() throws IOException {
+        File file = new File(this.RELATIVE_PATH);
+        try (FileOutputStream fs = new FileOutputStream(file);
+             ObjectOutputStream os = new ObjectOutputStream(fs)) {
+            os.writeObject(this.tasks);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * This method loads an ArrayList object from a file specified by the RELATIVE_PATH variable.
+     * @return Object that corresponds to the deserialized ArrayList, null if IOException occurred.
+     * @throws IOException
+     */
+
+    public Object loadTasksFromFile() throws IOException {
+        Object object = null;
+        File file = new File(this.RELATIVE_PATH);
+        try (FileInputStream fs = new FileInputStream(file);
+             ObjectInputStream is = new ObjectInputStream(fs)) {
+            object = is.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return object;
     }
 
     /**
