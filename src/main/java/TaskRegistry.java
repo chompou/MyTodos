@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Objects;
 
+import enums.TaskStatus;
+
 /**
  * This class represents the list of tasks created by the user.
  * Its only field is the arraylist of tasks.
@@ -88,7 +90,7 @@ public class TaskRegistry {
         Iterator<Task> i = tasks.iterator();
         while(i.hasNext()){
             Task task = i.next();
-            if (task.getStatus() == 3){
+            if (task.getStatus() == TaskStatus.COMPLETE){
                 i.remove();
             }
         }
