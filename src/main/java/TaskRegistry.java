@@ -1,10 +1,8 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 import enums.TaskStatus;
+import enums.TaskPriority;
 
 /**
  * This class represents the list of tasks created by the user.
@@ -44,9 +42,10 @@ public class TaskRegistry {
      */
     public boolean registerTask(Task task){
         if(tasks.contains(task)){
-            return true;
-        } else {
             return false;
+        } else {
+            this.tasks.add(task);
+            return true;
         }
     }
 
@@ -74,12 +73,21 @@ public class TaskRegistry {
     }
 
     /**
-     * This method filters the taskslist
+     * This method filters the task arraylist according to three provided arguments
+     * @param status a TaskStatus to filter statuses
+     * @param search a search string to filter descriptions. the string will be matched as a case insensitive substring of any matching descriptions
+     * @param category a string to filter categories. the string may be case insensitive, but must otherwise match.
      * @return the filtered tasklist
      */
-    public ArrayList<Task> filterTasks(){
-        //not finished
-        return tasks;
+    public ArrayList<Task> filterTasks(TaskStatus status, String search, String category){
+        ArrayList<Task> filteredTasks = new ArrayList<>();
+        for (Task task: tasks)
+            if (status == null || task.getStatus() == status)
+                if (search == null || task.getDescription().toLowerCase().contains(search.toLowerCase()))
+                    if (category == null || task.getCategory().equalsIgnoreCase(category))
+                        filteredTasks.add(task);
+
+        return filteredTasks;
     }
 
     /**
