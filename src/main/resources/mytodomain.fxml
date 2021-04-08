@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.ApplicationController">
+   <items>
+      <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <TableView fx:id="taskTable" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn fx:id="descriptionColumn" editable="false" prefWidth="116.0" text="Description" />
+                <TableColumn fx:id="categoryColumn" editable="false" prefWidth="76.0" text="Category" />
+                  <TableColumn fx:id="deadlineColumn" editable="false" prefWidth="108.0" text="Deadline" />
+                  <TableColumn fx:id="priorityColumn" editable="false" minWidth="0.0" prefWidth="38.0" text="Priority" />
+              </columns>
+            </TableView>
+         </center>
+         <top>
+            <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <buttons>
+                  <ToggleButton fx:id="completedToggleButton" mnemonicParsing="false" text="Completed">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="toggleGroup1" />
+                     </toggleGroup></ToggleButton>
+                  <ToggleButton fx:id="inProgressToggleButton" mnemonicParsing="false" text="In Progress" toggleGroup="$toggleGroup1" />
+                  <ToggleButton fx:id="todoToggleButton" mnemonicParsing="false" text="TODO" toggleGroup="$toggleGroup1" />
+               </buttons>
+               <BorderPane.margin>
+                  <Insets left="2.0" />
+               </BorderPane.margin>
+            </ButtonBar>
+         </top>
+      </BorderPane>
+      <VBox fx:id="vBox" maxWidth="145.0" spacing="10.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+               <children>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Button fx:id="createTaskButton" mnemonicParsing="false" onAction="#onTaskCreate">
+                           <graphic>
+                              <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@plus.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="deleteTasksButton" mnemonicParsing="false" onAction="#onDeleteTasks">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@bin.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#onSettings">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@cog.jpg" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <TextField fx:id="searchTextField" promptText="Search">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <ChoiceBox fx:id="categoryFilterChoiceBox" prefWidth="150.0">
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin>
+                  </ChoiceBox>
+               </children>
+               <padding>
+                  <Insets top="38.0" />
+               </padding>
+            </VBox>
+         </children>
+      </VBox>
+   </items>
+</SplitPane>
