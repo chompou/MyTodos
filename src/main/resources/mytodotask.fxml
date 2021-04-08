@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.TaskEditorController">
    <center>
       <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="245.0">
         <columnConstraints>
@@ -79,9 +78,9 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="68.0" prefWidth="245.0" spacing="25.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Button" />
-            <Button mnemonicParsing="false" text="Button" />
-            <Button mnemonicParsing="false" text="Button" />
+            <Button fx:id="addSaveTask" mnemonicParsing="false" onAction="#onAddSaveTask" text="Add" />
+            <Button fx:id="delete" mnemonicParsing="false" onAction="#onDeleteTask" text="Delete" />
+            <Button fx:id="cancelChange" mnemonicParsing="false" onAction="#onCancelChange" text="Cancel" />
          </children>
       </HBox>
    </bottom>
