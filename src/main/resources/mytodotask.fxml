@@ -79,7 +79,7 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="68.0" prefWidth="245.0" spacing="25.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" text="Add" />
             <Button mnemonicParsing="false" text="Button" />
             <Button mnemonicParsing="false" text="Button" />
          </children>

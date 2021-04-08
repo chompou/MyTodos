@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+import java.util.stream.Collectors;
 
 public class TaskRegistryTest {
 
@@ -39,10 +40,10 @@ public class TaskRegistryTest {
 
         assertEquals(taskRegistry.getTasks(), taskRegistry.loadTasksFromFile());
     }
-
+    /*
     @Test
     public void filterTasksTest() {
-        ArrayList<Task> filteredTasks = taskRegistry.filterTasks(TaskStatus.COMPLETE, null, null);
+        ArrayList<Task> filteredTasks = taskRegistry., null, null);
         assertEquals(new ArrayList<Task>(), filteredTasks);
 
         filteredTasks = taskRegistry.filterTasks(null, "3", null);
@@ -62,5 +63,10 @@ public class TaskRegistryTest {
 
         filteredTasks = taskRegistry.filterTasks(TaskStatus.TODO, "1", "tasks");
         assertEquals(taskRegistry.getTasks().subList(0, 1), filteredTasks);
+    } */
+
+    @Test
+    public void filterTest() {
+
     }
 }

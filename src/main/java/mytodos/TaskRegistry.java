@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import enums.TaskStatus;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * This class represents the list of tasks created by the user.
@@ -86,15 +86,15 @@ public class TaskRegistry {
      * @param category a string to filter categories. the string may be case insensitive, but must otherwise match.
      * @return the filtered tasklist
      */
-    public ArrayList<Task> filterTasks(TaskStatus status, String search, String category){
-        ArrayList<Task> filteredTasks = new ArrayList<>();
-        for (Task task: tasks)
+
+    public static Predicate<Task> filterPredicate(TaskStatus status, String search, String category) {
+        return task -> {
             if (status == null || task.getStatus() == status)
                 if (search == null || task.getDescription().toLowerCase().contains(search.toLowerCase()))
                     if (category == null || task.getCategory().equalsIgnoreCase(category))
-                        filteredTasks.add(task);
-
-        return filteredTasks;
+                        return true;
+            return false;
+        };
     }
 
     /**
@@ -143,8 +143,9 @@ public class TaskRegistry {
         JavaType type = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Task.class);
         try {
             this.tasks = mapper.readValue(Paths.get(RELATIVE_PATH).toFile(), type);
+        } catch (FileNotFoundException e) {
+            return false;
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
         return true;
