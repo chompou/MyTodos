@@ -7,9 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.Assert.*;
+
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TaskRegistryTest {
@@ -38,35 +40,38 @@ public class TaskRegistryTest {
     public void writeAndReadTasksTest() {
         assertTrue(taskRegistry.writeTasksToFile());
 
-        assertEquals(taskRegistry.getTasks(), taskRegistry.loadTasksFromFile());
+        ArrayList<Task> oldTasks = new ArrayList<Task>();
+        oldTasks.addAll(taskRegistry.getTasks());
+        taskRegistry.loadTasksFromFile();
+
+        assertEquals(oldTasks, taskRegistry.getTasks());
     }
-    /*
+
     @Test
     public void filterTasksTest() {
-        ArrayList<Task> filteredTasks = taskRegistry., null, null);
-        assertEquals(new ArrayList<Task>(), filteredTasks);
+        Predicate<Task> predicate = TaskRegistry.filterPredicate(null, null, null);
+        assertEquals(taskRegistry.getTasks(), filter(taskRegistry.getTasks(), predicate));
 
-        filteredTasks = taskRegistry.filterTasks(null, "3", null);
-        assertEquals(taskRegistry.getTasks().subList(2, 3), filteredTasks);
+        predicate = TaskRegistry.filterPredicate(null, "3", null);
+        assertEquals(taskRegistry.getTasks().subList(2, 3), filter(taskRegistry.getTasks(), predicate));
 
-        filteredTasks = taskRegistry.filterTasks(null, null, "Tasks");
-        assertEquals(taskRegistry.getTasks().subList(0, 2), filteredTasks);
+        predicate = TaskRegistry.filterPredicate(null, null, "Tasks");
+        assertEquals(taskRegistry.getTasks().subList(0, 2), filter(taskRegistry.getTasks(), predicate));
 
-        filteredTasks = taskRegistry.filterTasks(TaskStatus.TODO, "2", null);
-        assertEquals(taskRegistry.getTasks().subList(1, 2), filteredTasks);
+        predicate = TaskRegistry.filterPredicate(TaskStatus.TODO, "2", null);
+        assertEquals(taskRegistry.getTasks().subList(1, 2), filter(taskRegistry.getTasks(), predicate));
 
-        filteredTasks = taskRegistry.filterTasks(TaskStatus.TODO, null, "Other");
-        assertEquals(taskRegistry.getTasks().subList(2, 3), filteredTasks);
+        predicate = TaskRegistry.filterPredicate(TaskStatus.TODO, null, "Other");
+        assertEquals(taskRegistry.getTasks().subList(2, 3), filter(taskRegistry.getTasks(), predicate));
 
-        filteredTasks = taskRegistry.filterTasks(null, "1", "other");
-        assertEquals(new ArrayList<Task>(), filteredTasks);
+        predicate = TaskRegistry.filterPredicate(null, "1", "other");
+        assertEquals(new ArrayList<Task>(), filter(taskRegistry.getTasks(), predicate));
 
-        filteredTasks = taskRegistry.filterTasks(TaskStatus.TODO, "1", "tasks");
-        assertEquals(taskRegistry.getTasks().subList(0, 1), filteredTasks);
-    } */
+        predicate = TaskRegistry.filterPredicate(TaskStatus.TODO, "1", "tasks");
+        assertEquals(taskRegistry.getTasks().subList(0, 1), filter(taskRegistry.getTasks(), predicate));
+    }
 
-    @Test
-    public void filterTest() {
-
+    static List<Task> filter(List<Task> tasks, Predicate<Task> predicate) {
+        return tasks.stream().filter(predicate).collect(Collectors.toList());
     }
 }

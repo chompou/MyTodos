@@ -79,7 +79,7 @@
       <HBox alignment="CENTER" prefHeight="68.0" prefWidth="245.0" spacing="25.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="addSaveTask" mnemonicParsing="false" onAction="#onAddSaveTask" text="Add" />
-            <Button fx:id="delete" mnemonicParsing="false" onAction="#onDeleteTask" text="Delete" />
+            <Button fx:id="deleteTask" mnemonicParsing="false" onAction="#onDeleteTask" text="Delete" />
             <Button fx:id="cancelChange" mnemonicParsing="false" onAction="#onCancelChange" text="Cancel" />
          </children>
       </HBox>

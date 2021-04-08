@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 public class TaskEditorController {
     private Task task;
+    private TaskRegistry taskRegistry;
 
     @FXML
     private TextField descriptionTextField;
@@ -31,12 +32,12 @@ public class TaskEditorController {
     @FXML
     private Button addSaveTask;
     @FXML
-    private Button delete;
+    private Button deleteTask;
     @FXML
     private Button cancelChange;
 
     TaskEditorController(TaskRegistry taskRegistry) {
-        this.task = null;
+        this.taskRegistry = taskRegistry;
         descriptionTextField.setText(null);
         categoryTextField.setText(null);
         deadlineDatePicker.setValue(null);
@@ -44,11 +45,13 @@ public class TaskEditorController {
         statusChoiceBox.setValue(null);
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(null);
+        deleteTask.setVisible(false);
 
     }
 
 
     TaskEditorController(TaskRegistry taskRegistry, Task task) {
+        this.taskRegistry = taskRegistry;
         descriptionTextField.setText(task.getDescription());
         categoryTextField.setText(task.getCategory());
         deadlineDatePicker.setValue(task.getDeadline());
@@ -56,12 +59,18 @@ public class TaskEditorController {
         statusChoiceBox.setValue(task.getStatus());
         startDatePicker.setValue(task.getStartDate());
         endDatePicker.setValue(task.getEndDate());
+        addSaveTask.setText("Save");
 
     }
 
     @FXML
     void onAddTask(ActionEvent event) {
-
+        String description = descriptionTextField.getText();
+        String category = categoryTextField.getText();
+        LocalDate deadline = deadlineDatePicker.getValue();
+        TaskPriority priority = priorityChoiceBox.getValue();
+        taskRegistry.registerTask(new Task(description, category, deadline, priority));
+        //add shut down of taskEditor.
     }
     @FXML
     void onSaveTask(ActionEvent event) {
@@ -69,7 +78,11 @@ public class TaskEditorController {
     }
     @FXML
     void onAddSaveTask(ActionEvent event) {
-
+        if (task != null){
+            onSaveTask(event);
+        } else {
+            onAddTask(event);
+        }
 
     }
 

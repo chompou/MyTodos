@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 
+import javax.imageio.IIOException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Set;
@@ -69,15 +71,9 @@ public class ApplicationController {
     private ChoiceBox<String> categoryFilterChoiceBox;
 
     @FXML
-    void onTaskCreate(ActionEvent event) throws Exception {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodotask.fxml"));
-        loader.setController(new TaskEditorController(taskRegistry));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.show();
+    void onTaskCreate(ActionEvent event)  {
+        Object controller = new TaskEditorController(taskRegistry);
+        openTaskEditor(controller);
     }
 
     @FXML
@@ -112,21 +108,25 @@ public class ApplicationController {
         filteredTasks.setPredicate(TaskRegistry.filterPredicate(taskStatus, search, category));
     }
 
-    void editTask(Task task) throws Exception {
-        new TaskEditorController(taskRegistry, task);
+    void editTask(Task task) {
+        Object controller = new TaskEditorController(taskRegistry, task);
+        openTaskEditor(controller);
     }
 
-    void openTaskEditor() {
+    void openTaskEditor(Object controller) {
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodotask.fxml"));
-        loader.setController(Class());
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        stage.show();
+        loader.setController(controller);
+        try{
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
 
     @FXML
     void initialize() {
