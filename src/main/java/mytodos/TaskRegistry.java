@@ -1,15 +1,22 @@
-import java.io.*;
-import java.util.*;
+package mytodos;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import enums.TaskStatus;
-import enums.TaskPriority;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * This class represents the list of tasks created by the user.
  * Its only field is the arraylist of tasks.
  */
 public class TaskRegistry {
-    final String RELATIVE_PATH = "tasks.todo";
+    final static String RELATIVE_PATH = "tasks.todo";
     private ArrayList<Task> tasks;
 
     /**
@@ -106,16 +113,16 @@ public class TaskRegistry {
     }
 
     /**
-     * This method writes the current ArrayList of Task objects to a file specified by the RELATIVE_PATH variable.
+     * This method writes the current ArrayList of mytodos.Task objects to a file specified by the RELATIVE_PATH variable.
      * @return true if ArrayList was successfully written to file, false if an IOException occurred.
      * @throws IOException
      */
 
-    public boolean writeTasksToFile() throws IOException {
-        File file = new File(this.RELATIVE_PATH);
-        try (FileOutputStream fs = new FileOutputStream(file);
-             ObjectOutputStream os = new ObjectOutputStream(fs)) {
-            os.writeObject(this.tasks);
+    public boolean writeTasksToFile() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
+            mapper.writeValue(Paths.get(RELATIVE_PATH).toFile(), this.tasks);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -123,22 +130,24 @@ public class TaskRegistry {
         return true;
     }
 
-    /**
+    /** REWRITE
      * This method loads an ArrayList object from a file specified by the RELATIVE_PATH variable.
      * @return Object that corresponds to the deserialized ArrayList, null if IOException occurred.
      * @throws IOException
      */
 
-    public Object loadTasksFromFile() throws IOException {
-        Object object = null;
-        File file = new File(this.RELATIVE_PATH);
-        try (FileInputStream fs = new FileInputStream(file);
-             ObjectInputStream is = new ObjectInputStream(fs)) {
-            object = is.readObject();
-        } catch (ClassNotFoundException e) {
+    public boolean loadTasksFromFile() {
+        ArrayList<Task> loadedTasks = null;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.findAndRegisterModules();
+        JavaType type = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Task.class);
+        try {
+            this.tasks = mapper.readValue(Paths.get(RELATIVE_PATH).toFile(), type);
+        } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-        return object;
+        return true;
     }
 
     /**
@@ -169,7 +178,7 @@ public class TaskRegistry {
      */
     @Override
     public String toString() {
-        return "TaskRegistry{" +
+        return "mytodos.TaskRegistry{" +
                 "tasks=" + tasks +
                 '}';
     }

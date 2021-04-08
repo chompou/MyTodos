@@ -1,7 +1,10 @@
+package mytodos;
+
 import enums.TaskPriority;
 import enums.TaskStatus;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Task {
     private String description;
@@ -11,6 +14,10 @@ public class Task {
     private TaskStatus status;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    public Task() {
+
+    }
 
     public Task(String description, String category, LocalDate deadline, TaskPriority priority) {
         this.description = description;
@@ -78,8 +85,16 @@ public class Task {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(description, task.description) && Objects.equals(category, task.category) && Objects.equals(deadline, task.deadline) && priority == task.priority && status == task.status && Objects.equals(startDate, task.startDate) && Objects.equals(endDate, task.endDate);
+    }
+
+    @Override
     public String toString() {
-        return "Task {" +
+        return "mytodos.Task {" +
                 " description = '" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", deadline=" + deadline +
