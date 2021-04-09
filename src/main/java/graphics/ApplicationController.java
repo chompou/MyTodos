@@ -8,6 +8,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -172,8 +173,21 @@ public class ApplicationController {
                     CheckBox checkBox = new CheckBox();
 
                     {
-                        checkBox.setOnAction((ActionEvent) -> {
-                            System.out.println(getTableView().getItems().get(getIndex()));
+                        checkBox.setAllowIndeterminate(true);
+                        checkBox.setOnAction((ActionEvent event) -> {
+                            TaskStatus status;
+                            boolean indeterminate = checkBox.isIndeterminate();
+                            boolean selected = checkBox.isSelected();
+                            if (!indeterminate)
+                                if (selected)
+                                    status = TaskStatus.COMPLETE;
+                                else
+                                    status = TaskStatus.TODO;
+                            else
+                                status = TaskStatus.IN_PROGRESS;
+
+                            Task task = getTableView().getItems().get(getIndex());
+
                         });
                     }
 
@@ -187,6 +201,7 @@ public class ApplicationController {
                         }
                     }
                 };
+                cell.setAlignment(Pos.CENTER);
                 return cell;
             }
         };
@@ -202,7 +217,7 @@ public class ApplicationController {
         checkboxColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));
         categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
-        deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.19));
+        deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.18));
         priorityColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.12));
     }
 }
