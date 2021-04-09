@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.TaskEditorController">
+<BorderPane xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="245.0">
         <columnConstraints>

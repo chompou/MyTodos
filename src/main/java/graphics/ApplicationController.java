@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 public class ApplicationController {
     private TaskRegistry taskRegistry;
-    private ObservableList<Task> observableTasks;
     private FilteredList<Task> filteredTasks;
 
     @FXML
@@ -72,7 +71,7 @@ public class ApplicationController {
 
     @FXML
     void onTaskCreate(ActionEvent event)  {
-        Object controller = new TaskEditorController(taskRegistry);
+        Object controller = new TaskEditorController(this, taskRegistry);
         openTaskEditor(controller);
     }
 
@@ -83,7 +82,12 @@ public class ApplicationController {
 
     @FXML
     void onSettings(ActionEvent event) {
+    }
 
+    void updateTable() {
+        ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
+        filteredTasks = new FilteredList<>(observableTasks);
+        taskTable.setItems(filteredTasks);
     }
 
     void updateFilter() {
@@ -109,7 +113,7 @@ public class ApplicationController {
     }
 
     void editTask(Task task) {
-        Object controller = new TaskEditorController(taskRegistry, task);
+        Object controller = new TaskEditorController(this, taskRegistry, task);
         openTaskEditor(controller);
     }
 
@@ -132,10 +136,7 @@ public class ApplicationController {
     void initialize() {
         taskRegistry = new TaskRegistry();
         taskRegistry.loadTasksFromFile();
-
-        observableTasks = FXCollections.observableList(taskRegistry.getTasks());
-        filteredTasks = new FilteredList<>(observableTasks);
-        taskTable.setItems(filteredTasks);
+        updateTable();
 
         taskTable.setRowFactory( tv -> {
             TableRow<Task> row = new TableRow<>();
@@ -159,7 +160,7 @@ public class ApplicationController {
         priorityColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.15));
 
         Set<String> categories = taskRegistry.getTasks().stream().map(Task::getCategory).collect(Collectors.toSet());
-        ArrayList<String> categoryList = new ArrayList<String>(categories);
+        ArrayList<String> categoryList = new ArrayList<>(categories);
         categoryList.add(0, "All Categories");
         categoryFilterChoiceBox.setItems(FXCollections.observableList(categoryList));
         categoryFilterChoiceBox.getSelectionModel().selectFirst();

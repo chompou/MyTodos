@@ -14,13 +14,12 @@ public class TaskApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        taskRegistry = new TaskRegistry();
-
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodomain.fxml"));
+        loader.setController(new ApplicationController());
         Parent root = loader.load();
         Scene scene = new Scene(root, 600 ,400);
         stage.setScene(scene);
-        stage.show();
+        stage.show();;
     }
 
     public static void main(String[] args) {

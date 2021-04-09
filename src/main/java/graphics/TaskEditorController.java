@@ -4,6 +4,7 @@ import enums.TaskPriority;
 import enums.TaskStatus;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 import javafx.fxml.FXML;
@@ -12,8 +13,9 @@ import javafx.scene.control.*;
 import java.time.LocalDate;
 
 public class TaskEditorController {
-    private Task task;
-    private TaskRegistry taskRegistry;
+    final private Task task;
+    final private TaskRegistry taskRegistry;
+    final private ApplicationController controller;
 
     @FXML
     private TextField descriptionTextField;
@@ -36,31 +38,41 @@ public class TaskEditorController {
     @FXML
     private Button cancelChange;
 
-    TaskEditorController(TaskRegistry taskRegistry) {
+    TaskEditorController(ApplicationController controller, TaskRegistry taskRegistry) {
+        this.controller = controller;
         this.taskRegistry = taskRegistry;
-        descriptionTextField.setText(null);
-        categoryTextField.setText(null);
-        deadlineDatePicker.setValue(null);
-        priorityChoiceBox.setValue(null);
-        statusChoiceBox.setValue(null);
-        startDatePicker.setValue(LocalDate.now());
-        endDatePicker.setValue(null);
-        deleteTask.setVisible(false);
+        this.task = null;
 
     }
 
-
-    TaskEditorController(TaskRegistry taskRegistry, Task task) {
+    TaskEditorController(ApplicationController controller, TaskRegistry taskRegistry, Task task) {
+        this.controller = controller;
         this.taskRegistry = taskRegistry;
-        descriptionTextField.setText(task.getDescription());
-        categoryTextField.setText(task.getCategory());
-        deadlineDatePicker.setValue(task.getDeadline());
-        priorityChoiceBox.setValue(task.getPriority());
-        statusChoiceBox.setValue(task.getStatus());
-        startDatePicker.setValue(task.getStartDate());
-        endDatePicker.setValue(task.getEndDate());
-        addSaveTask.setText("Save");
+        this.task = task;
+    }
 
+    @FXML
+    void initialize() {
+        if (task != null) {
+            descriptionTextField.setText(task.getDescription());
+            categoryTextField.setText(task.getCategory());
+            deadlineDatePicker.setValue(task.getDeadline());
+            priorityChoiceBox.setValue(task.getPriority());
+            statusChoiceBox.setValue(task.getStatus());
+            startDatePicker.setValue(task.getStartDate());
+            endDatePicker.setValue(task.getEndDate());
+            addSaveTask.setText("Save");
+
+        } else {
+            descriptionTextField.setText(null);
+            categoryTextField.setText(null);
+            deadlineDatePicker.setValue(null);
+            priorityChoiceBox.setValue(null);
+            statusChoiceBox.setValue(null);
+            startDatePicker.setValue(LocalDate.now());
+            endDatePicker.setValue(null);
+            deleteTask.setVisible(false);
+        }
     }
 
     @FXML
@@ -70,7 +82,8 @@ public class TaskEditorController {
         LocalDate deadline = deadlineDatePicker.getValue();
         TaskPriority priority = priorityChoiceBox.getValue();
         taskRegistry.registerTask(new Task(description, category, deadline, priority));
-        //add shut down of taskEditor.
+        this.controller.updateTable();
+        ((Node)(event.getSource())).getScene().getWindow().hide();
     }
     @FXML
     void onSaveTask(ActionEvent event) {
