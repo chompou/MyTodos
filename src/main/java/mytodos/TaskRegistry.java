@@ -70,6 +70,24 @@ public class TaskRegistry {
     }
 
     /**
+     * This method updates a Task object in the tasks ArrayList with another arbitrary Task at the same index
+     * @param oldTask the old Task object being replaced
+     * @param newTask the new Task object replacing the old one
+     * @return true if task was successfully replaced, false if old task was not found in the task list
+     */
+
+    public boolean updateTask(Task oldTask, Task newTask){
+        if (tasks.contains(oldTask)) {
+            int index = tasks.indexOf(oldTask);
+            tasks.remove(oldTask);
+            tasks.add(index, newTask);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * This method takes in a comparator and uses it to sort the task list.
      * @param comparator the comparator we are using to sort the task list with.
      * @return the sorted list

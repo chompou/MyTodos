@@ -1,7 +1,12 @@
 package enums;
 
 public enum TaskPriority {
-    HIGH,
-    MEDIUM,
-    LOW
+    HIGH("High"),
+    MEDIUM("Medium"),
+    LOW("Low");
+
+    public String text;
+    private TaskPriority(String text) {
+        this.text = text;
+    }
 }

@@ -41,6 +41,7 @@ public class ApplicationController {
 
     @FXML
     private TableView<Task> taskTable;
+    private TableColumn<Task, Void> checkboxColumn;
     @FXML
     private TableColumn<Task, String> descriptionColumn;
     @FXML
@@ -92,6 +93,7 @@ public class ApplicationController {
         filteredTasks = new FilteredList<>(observableTasks);
         taskTable.setItems(filteredTasks);
     }
+
 
     void updateCategories() {
         Set<String> categories = taskRegistry.getTasks().stream().map(Task::getCategory).collect(Collectors.toSet());
@@ -164,7 +166,7 @@ public class ApplicationController {
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
         categoryFilterChoiceBox.valueProperty().addListener(event -> updateFilter());
 
-        TableColumn<Task, Void> checkboxColumn = new TableColumn<Task, Void>("Status");
+        checkboxColumn = new TableColumn<Task, Void>("Status");
 
         Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<TableColumn<Task, Void>, TableCell<Task, Void>>() {
             @Override
@@ -175,18 +177,20 @@ public class ApplicationController {
                     {
                         checkBox.setAllowIndeterminate(true);
                         checkBox.setOnAction((ActionEvent event) -> {
-                            TaskStatus status;
+                            Task newTask = getTableView().getItems().get(getIndex());
                             boolean indeterminate = checkBox.isIndeterminate();
                             boolean selected = checkBox.isSelected();
-                            if (!indeterminate)
-                                if (selected)
-                                    status = TaskStatus.COMPLETE;
-                                else
-                                    status = TaskStatus.TODO;
-                            else
-                                status = TaskStatus.IN_PROGRESS;
+                            if (!indeterminate && selected)
+                                newTask.setStatus(TaskStatus.COMPLETE);
+                            if (indeterminate && !selected)
+                                newTask.setStatus(TaskStatus.IN_PROGRESS);
+                            if (!indeterminate && !selected)
+                                newTask.setStatus(TaskStatus.TODO);
 
-                            Task task = getTableView().getItems().get(getIndex());
+                            Task oldTask = taskRegistry.getTasks().get(getIndex());
+                            taskRegistry.updateTask(oldTask, newTask);
+                            taskRegistry.writeTasksToFile();
+                            updateFilter();
 
                         });
                     }
@@ -197,6 +201,17 @@ public class ApplicationController {
                         if (empty) {
                             setGraphic(null);
                         } else {
+                            Task task = getTableView().getItems().get(getIndex());
+                            if (task.getStatus() == TaskStatus.COMPLETE){
+                                checkBox.setIndeterminate(false);
+                                checkBox.setSelected(true);
+                            } else if (task.getStatus() == TaskStatus.IN_PROGRESS) {
+                                checkBox.setIndeterminate(true);
+                                checkBox.setSelected(false);
+                            } else {
+                                checkBox.setIndeterminate(false);
+                                checkBox.setSelected(false);
+                            }
                             setGraphic(checkBox);
                         }
                     }
@@ -219,5 +234,6 @@ public class ApplicationController {
         categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
         deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.18));
         priorityColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.12));
+
     }
 }

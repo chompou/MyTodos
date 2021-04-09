@@ -100,9 +100,7 @@ public class TaskEditorController {
     }
 
     void onSaveTask(ActionEvent event) {
-        int index = taskRegistry.getTasks().indexOf(this.task);
-        taskRegistry.getTasks().remove(this.task);
-        taskRegistry.getTasks().add(index, createTaskFromFields());
+        taskRegistry.updateTask(task, createTaskFromFields());
         this.controller.updateTable();
         taskRegistry.writeTasksToFile();
         closeStage(event);
@@ -125,6 +123,8 @@ public class TaskEditorController {
 
     @FXML
     void onDeleteTask(ActionEvent event) {
-
+        taskRegistry.deleteTask(this.task);
+        taskRegistry.writeTasksToFile();
+        closeStage(event);
     }
 }

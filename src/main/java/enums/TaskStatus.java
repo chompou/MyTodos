@@ -1,8 +1,12 @@
 package enums;
 
 public enum TaskStatus {
-    TODO,
-    IN_PROGRESS,
-    COMPLETE;
+    TODO("To-Do"),
+    IN_PROGRESS("In Progress"),
+    COMPLETE("Complete");
 
+    public String text;
+    private TaskStatus(String text) {
+        this.text = text;
+    }
 }
