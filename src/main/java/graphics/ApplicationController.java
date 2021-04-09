@@ -85,9 +85,18 @@ public class ApplicationController {
     }
 
     void updateTable() {
+        updateCategories();
         ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
         filteredTasks = new FilteredList<>(observableTasks);
         taskTable.setItems(filteredTasks);
+    }
+
+    void updateCategories() {
+        Set<String> categories = taskRegistry.getTasks().stream().map(Task::getCategory).collect(Collectors.toSet());
+        ArrayList<String> categoryList = new ArrayList<>(categories);
+        categoryList.add(0, "All Categories");
+        categoryFilterChoiceBox.setItems(FXCollections.observableList(categoryList));
+        categoryFilterChoiceBox.getSelectionModel().selectFirst();
     }
 
     void updateFilter() {
@@ -105,7 +114,7 @@ public class ApplicationController {
             search = searchTextField.getText();
         }
 
-        if (!categoryFilterChoiceBox.getValue().equals("All Categories")) {
+        if (categoryFilterChoiceBox.getValue() != null && !categoryFilterChoiceBox.getValue().equals("All Categories")) {
             category = categoryFilterChoiceBox.getValue();
         }
 
@@ -158,12 +167,6 @@ public class ApplicationController {
         categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.25));
         deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
         priorityColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.15));
-
-        Set<String> categories = taskRegistry.getTasks().stream().map(Task::getCategory).collect(Collectors.toSet());
-        ArrayList<String> categoryList = new ArrayList<>(categories);
-        categoryList.add(0, "All Categories");
-        categoryFilterChoiceBox.setItems(FXCollections.observableList(categoryList));
-        categoryFilterChoiceBox.getSelectionModel().selectFirst();
 
         toggleGroup1.selectedToggleProperty().addListener(button -> updateFilter());
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());

@@ -80,11 +80,11 @@ public class TaskRegistry {
     }
 
     /**
-     * This method filters the task arraylist according to three provided arguments
+     * This method creates a predicate for filtering a collection of tasks according to three provided arguments
      * @param status a TaskStatus to filter statuses
      * @param search a search string to filter descriptions. the string will be matched as a case insensitive substring of any matching descriptions
      * @param category a string to filter categories. the string may be case insensitive, but must otherwise match.
-     * @return the filtered tasklist
+     * @return a predicate
      */
 
     public static Predicate<Task> filterPredicate(TaskStatus status, String search, String category) {
@@ -113,7 +113,7 @@ public class TaskRegistry {
     }
 
     /**
-     * This method writes the current ArrayList of mytodos.Task objects to a file specified by the RELATIVE_PATH variable.
+     * This method writes the current ArrayList of Task objects to a file specified by the RELATIVE_PATH variable.
      * @return true if ArrayList was successfully written to file, false if an IOException occurred.
      * @throws IOException
      */
@@ -130,10 +130,10 @@ public class TaskRegistry {
         return true;
     }
 
-    /** REWRITE
+    /**
      * This method loads an ArrayList object from a file specified by the RELATIVE_PATH variable.
-     * @return Object that corresponds to the deserialized ArrayList, null if IOException occurred.
-     * @throws IOException
+     * The loaded ArrayList then overwrites the current task ArrayList of the instantiated TaskRegistry.
+     * @return true if the list was sucesfully loaded into the tasks field, false if an IOException occurred.
      */
 
     public boolean loadTasksFromFile() {

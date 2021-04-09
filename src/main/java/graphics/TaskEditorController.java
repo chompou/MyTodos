@@ -2,6 +2,8 @@ package graphics;
 
 import enums.TaskPriority;
 import enums.TaskStatus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -53,6 +55,9 @@ public class TaskEditorController {
 
     @FXML
     void initialize() {
+        ObservableList<TaskPriority> taskPriorities = FXCollections.observableArrayList(TaskPriority.values());
+        priorityChoiceBox.setItems(taskPriorities);
+
         if (task != null) {
             descriptionTextField.setText(task.getDescription());
             categoryTextField.setText(task.getCategory());
