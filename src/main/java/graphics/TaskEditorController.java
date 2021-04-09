@@ -80,20 +80,34 @@ public class TaskEditorController {
         }
     }
 
-    @FXML
-    void onAddTask(ActionEvent event) {
+    void closeStage(ActionEvent event) {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+    }
+
+    Task createTaskFromFields() {
         String description = descriptionTextField.getText();
         String category = categoryTextField.getText();
         LocalDate deadline = deadlineDatePicker.getValue();
         TaskPriority priority = priorityChoiceBox.getValue();
-        taskRegistry.registerTask(new Task(description, category, deadline, priority));
-        this.controller.updateTable();
-        ((Node)(event.getSource())).getScene().getWindow().hide();
+        return new Task(description, category, deadline, priority);
     }
-    @FXML
-    void onSaveTask(ActionEvent event) {
 
+    void onAddTask(ActionEvent event) {
+        taskRegistry.registerTask(createTaskFromFields());
+        this.controller.updateTable();
+        taskRegistry.writeTasksToFile();
+        closeStage(event);
     }
+
+    void onSaveTask(ActionEvent event) {
+        int index = taskRegistry.getTasks().indexOf(this.task);
+        taskRegistry.getTasks().remove(this.task);
+        taskRegistry.getTasks().add(index, createTaskFromFields());
+        this.controller.updateTable();
+        taskRegistry.writeTasksToFile();
+        closeStage(event);
+    }
+
     @FXML
     void onAddSaveTask(ActionEvent event) {
         if (task != null){
@@ -106,7 +120,7 @@ public class TaskEditorController {
 
     @FXML
     void onCancelChange(ActionEvent event) {
-
+        closeStage(event);
     }
 
     @FXML

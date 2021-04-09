@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 
@@ -158,18 +159,50 @@ public class ApplicationController {
             return row;
         });
 
+        toggleGroup1.selectedToggleProperty().addListener(button -> updateFilter());
+        searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
+        categoryFilterChoiceBox.valueProperty().addListener(event -> updateFilter());
+
+        TableColumn<Task, Void> checkboxColumn = new TableColumn<Task, Void>("Status");
+
+        Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<TableColumn<Task, Void>, TableCell<Task, Void>>() {
+            @Override
+            public TableCell<Task, Void> call(final TableColumn<Task, Void> taskVoidTableColumn) {
+                final TableCell<Task, Void> cell = new TableCell<Task, Void>() {
+                    CheckBox checkBox = new CheckBox();
+
+                    {
+                        checkBox.setOnAction((ActionEvent) -> {
+                            System.out.println(getTableView().getItems().get(getIndex()));
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(checkBox);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        checkboxColumn.setCellFactory(cellFactory);
+        taskTable.getColumns().add(0, checkboxColumn);
+
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         deadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
         priorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
 
+        checkboxColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));
-        categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.25));
-        deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
-        priorityColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.15));
-
-        toggleGroup1.selectedToggleProperty().addListener(button -> updateFilter());
-        searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
-        categoryFilterChoiceBox.valueProperty().addListener(event -> updateFilter());
+        categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
+        deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.19));
+        priorityColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.12));
     }
 }
