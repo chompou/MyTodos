@@ -85,6 +85,11 @@ public class Task {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(description, category, deadline, priority, status, startDate, endDate);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

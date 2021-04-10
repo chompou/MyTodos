@@ -186,9 +186,6 @@ public class ApplicationController {
                                 newTask.setStatus(TaskStatus.IN_PROGRESS);
                             if (!indeterminate && !selected)
                                 newTask.setStatus(TaskStatus.TODO);
-
-                            Task oldTask = taskRegistry.getTasks().get(getIndex());
-                            taskRegistry.updateTask(oldTask, newTask);
                             taskRegistry.writeTasksToFile();
                             updateFilter();
 
