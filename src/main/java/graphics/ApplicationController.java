@@ -2,6 +2,8 @@ package graphics;
 
 import enums.TaskPriority;
 import enums.TaskStatus;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -20,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import mytodos.Task;
 import mytodos.TaskRegistry;
+import static javafx.scene.control.TableColumn.CellDataFeatures;
 
 import javax.imageio.IIOException;
 import java.io.IOException;
@@ -49,7 +52,7 @@ public class ApplicationController {
     @FXML
     private TableColumn<Task, LocalDate> deadlineColumn;
     @FXML
-    private TableColumn<Task, TaskPriority> priorityColumn;
+    private TableColumn<Task, String> priorityColumn;
 
     @FXML
     private ToggleGroup toggleGroup1;
@@ -93,7 +96,6 @@ public class ApplicationController {
         filteredTasks = new FilteredList<>(observableTasks);
         taskTable.setItems(filteredTasks);
     }
-
 
     void updateCategories() {
         Set<String> categories = taskRegistry.getTasks().stream().map(Task::getCategory).collect(Collectors.toSet());
@@ -186,6 +188,7 @@ public class ApplicationController {
                                 newTask.setStatus(TaskStatus.IN_PROGRESS);
                             if (!indeterminate && !selected)
                                 newTask.setStatus(TaskStatus.TODO);
+                            System.out.println(taskRegistry.getTasks().stream().map(Task::getStatus).collect(Collectors.toList()));
                             taskRegistry.writeTasksToFile();
                             updateFilter();
 
@@ -224,7 +227,7 @@ public class ApplicationController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         deadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
-        priorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
+        priorityColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getPriority().getValue()));
 
         checkboxColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));

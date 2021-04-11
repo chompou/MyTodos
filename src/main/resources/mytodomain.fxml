@@ -16,11 +16,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.Label?>
 <SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <items>
       <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
          <center>
             <TableView fx:id="taskTable" BorderPane.alignment="CENTER">
+               <placeholder>
+                  <Label text=""/>
+               </placeholder>
               <columns>
                 <TableColumn fx:id="descriptionColumn" editable="false" prefWidth="116.0" text="Description" />
                 <TableColumn fx:id="categoryColumn" editable="false" prefWidth="76.0" text="Category" />
