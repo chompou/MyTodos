@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,11 +24,13 @@ import javafx.util.Callback;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 import static javafx.scene.control.TableColumn.CellDataFeatures;
+import static javafx.scene.control.TableColumn.editStartEvent;
 
 import javax.imageio.IIOException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -94,7 +97,9 @@ public class ApplicationController {
         updateCategories();
         ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
         filteredTasks = new FilteredList<>(observableTasks);
-        taskTable.setItems(filteredTasks);
+        SortedList<Task> sortedTasks = new SortedList<>(filteredTasks);
+        sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
+        taskTable.setItems(sortedTasks);
     }
 
     void updateCategories() {
@@ -188,6 +193,12 @@ public class ApplicationController {
                                 newTask.setStatus(TaskStatus.IN_PROGRESS);
                             if (!indeterminate && !selected)
                                 newTask.setStatus(TaskStatus.TODO);
+
+                            if (newTask.getStatus() == TaskStatus.COMPLETE)
+                                newTask.setEndDate(LocalDate.now());
+                            else
+                                newTask.setEndDate(null);
+
                             System.out.println(taskRegistry.getTasks().stream().map(Task::getStatus).collect(Collectors.toList()));
                             taskRegistry.writeTasksToFile();
                             updateFilter();
@@ -227,6 +238,7 @@ public class ApplicationController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         deadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
+        priorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
         priorityColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getPriority().getValue()));
 
         checkboxColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));

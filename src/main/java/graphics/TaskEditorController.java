@@ -66,7 +66,6 @@ public class TaskEditorController {
             categoryTextField.setText(task.getCategory());
             deadlineDatePicker.setValue(task.getDeadline());
             priorityChoiceBox.setValue(task.getPriority().getValue());
-            System.out.println(task.getStatus());
             statusChoiceBox.setValue(task.getStatus().getValue());
             startDatePicker.setValue(task.getStartDate());
             endDatePicker.setValue(task.getEndDate());
