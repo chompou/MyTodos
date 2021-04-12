@@ -92,6 +92,19 @@ public class TaskEditorController {
         String category = categoryTextField.getText();
         LocalDate deadline = deadlineDatePicker.getValue();
         TaskPriority priority = TaskPriority.byValue(priorityChoiceBox.getValue());
+
+        String redBorderStyle = "-fx-text-box-border: red ;\n-fx-focus-color: red ;\n-fx-border-color: red ;";
+
+        if (description == null || category == null || priority == null) {
+            if (description == null);
+                descriptionTextField.setStyle(redBorderStyle);
+            if (category == null);
+               categoryTextField.setStyle(redBorderStyle);
+            if (priority == null);
+                priorityChoiceBox.setStyle(redBorderStyle);
+            return null;
+        }
+
         Task newTask = new Task(description, category, deadline, priority);
         if (readSecondaryInputs) {
             newTask.setStatus(TaskStatus.byValue(statusChoiceBox.getValue()));
@@ -102,17 +115,24 @@ public class TaskEditorController {
     }
 
     void onAddTask(ActionEvent event) {
-        taskRegistry.registerTask(createTaskFromFields(false));
-        this.controller.updateTable();
-        taskRegistry.writeTasksToFile();
-        closeStage(event);
+        Task newTask = createTaskFromFields(false);
+        if (newTask != null){
+            taskRegistry.registerTask(newTask);
+            this.controller.updateTable();
+            taskRegistry.writeTasksToFile();
+            closeStage(event);
+        }
     }
 
     void onSaveTask(ActionEvent event) {
-        taskRegistry.updateTask(task, createTaskFromFields(true));
-        this.controller.updateTable();
-        taskRegistry.writeTasksToFile();
-        closeStage(event);
+        Task newTask = createTaskFromFields(true);
+        if (newTask != null) {
+            taskRegistry.updateTask(task, newTask);
+            this.controller.updateTable();
+            taskRegistry.writeTasksToFile();
+            closeStage(event);
+        }
+
     }
 
     @FXML

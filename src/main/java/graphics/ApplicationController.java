@@ -97,6 +97,7 @@ public class ApplicationController {
         updateCategories();
         ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
         filteredTasks = new FilteredList<>(observableTasks);
+        updateFilter();
         SortedList<Task> sortedTasks = new SortedList<>(filteredTasks);
         sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
         taskTable.setItems(sortedTasks);
@@ -199,7 +200,6 @@ public class ApplicationController {
                             else
                                 newTask.setEndDate(null);
 
-                            System.out.println(taskRegistry.getTasks().stream().map(Task::getStatus).collect(Collectors.toList()));
                             taskRegistry.writeTasksToFile();
                             updateFilter();
 
