@@ -74,4 +74,11 @@ public class TaskRegistryTest {
     static List<Task> filter(List<Task> tasks, Predicate<Task> predicate) {
         return tasks.stream().filter(predicate).collect(Collectors.toList());
     }
+
+    @Test
+    public void deleteTaskTest() {
+        Task task1 = new Task("mytodos.Task #1", "Tasks", null, TaskPriority.LOW);
+        taskRegistry.registerTask(task1);
+        assertTrue(taskRegistry.deleteTask(task1));
+    }
 }
