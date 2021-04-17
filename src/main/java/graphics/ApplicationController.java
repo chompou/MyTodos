@@ -91,6 +91,19 @@ public class ApplicationController {
 
     @FXML
     void onSettings(ActionEvent event) {
+        SettingsController controller = new SettingsController(this, taskRegistry);
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodosettings.fxml"));
+        loader.setController(controller);
+        try {
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     void updateTable() {
