@@ -7,15 +7,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import graphics.DeleteController?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <HBox alignment="CENTER" prefHeight="65.0" prefWidth="600.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <TextField alignment="BASELINE_LEFT" promptText="Search" />
+                  <TextField fx:id="searchTextField" alignment="BASELINE_LEFT" promptText="Search" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
@@ -23,8 +24,9 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="249.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button mnemonicParsing="false" text="Select All Completed" />
-                  <Button mnemonicParsing="false" text="Select All" />
+                  <Button fx:id="UnselectAllButton" mnemonicParsing="false" onAction="#onUnselectAllButton" text="Unselect All" />
+                  <Button fx:id="SelectAllCompletedButton" mnemonicParsing="false" onAction="#onSelectAllCompletedButton" text="Select All Completed" />
+                  <Button fx:id="SelectAllButton" mnemonicParsing="false" onAction="#onSelectAllButton" text="Select All" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
@@ -32,7 +34,7 @@
             </HBox>
          </children>
       </HBox>
-      <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <TableView fx:id="taskTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <columns>
           <TableColumn fx:id="selectedColumn" prefWidth="75.0" />
           <TableColumn fx:id="descriptionColumn" prefWidth="75.0" text="Description" />
@@ -45,7 +47,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Delete by Categories" />
+                  <Button fx:id="DeleteByCategoriesButton" mnemonicParsing="false" onAction="#onDeleteByCategoriesButton" text="Delete by Categories" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
@@ -53,8 +55,8 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="249.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button mnemonicParsing="false" text="Select All Completed" />
-                  <Button mnemonicParsing="false" text="Select All" />
+                  <Button fx:id="CancelButton" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
+                  <Button fx:id="DeleteButton" mnemonicParsing="false" onAction="#onDeleteButton" text="Delete" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />

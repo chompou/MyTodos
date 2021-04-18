@@ -1,13 +1,24 @@
 package graphics;
 
+import enums.TaskPriority;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import mytodos.TaskRegistry;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DeleteController {
+    final private TaskRegistry taskRegistry;
+    final private ApplicationController controller;
 
     @FXML
     private TextField searchTextField;
@@ -47,6 +58,18 @@ public class DeleteController {
 
     @FXML
     private Button DeleteButton;
+
+
+    public DeleteController(TaskRegistry taskRegistry, ApplicationController controller) {
+        this.taskRegistry = taskRegistry;
+        this.controller = controller;
+    }
+
+    @FXML
+    void initialize() {
+        List<String> mappedPriorities = Arrays.stream(TaskPriority.values()).map(TaskPriority::getValue).collect(Collectors.toList());
+        ObservableList<String> taskPriorities = FXCollections.observableArrayList(mappedPriorities);
+    }
 
     @FXML
     void onCancelButton(ActionEvent event) {
