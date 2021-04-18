@@ -15,8 +15,8 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="66.0" prefWidth="248.0" spacing="25.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Apply" />
-            <Button mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="applyButton" mnemonicParsing="false" onAction="#onApply" text="Apply" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
          </children>
       </HBox>
    </bottom>
@@ -34,22 +34,22 @@
         </rowConstraints>
          <children>
             <Label alignment="CENTER" prefHeight="87.0" prefWidth="354.0" text="Text size" />
-            <Label alignment="CENTER" prefHeight="86.0" prefWidth="298.0" text="Colorblind mode" GridPane.rowIndex="1" />
+            <Label alignment="CENTER" prefHeight="86.0" prefWidth="251.0" text="Colorblind mode" GridPane.rowIndex="1" />
             <Label alignment="CENTER" prefHeight="86.0" prefWidth="212.0" text="Reminder configuration" GridPane.rowIndex="2" />
             <Label alignment="CENTER" prefHeight="203.0" prefWidth="577.0" text="Dark mode" GridPane.rowIndex="3" />
             <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <ChoiceBox prefHeight="25.0" prefWidth="63.0" />
+                  <ChoiceBox fx:id="darkModeChoiceBox" prefHeight="25.0" prefWidth="63.0" />
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <ChoiceBox prefHeight="25.0" prefWidth="63.0" />
+                  <ChoiceBox fx:id="textSizeChoiceBox" prefHeight="25.0" prefWidth="63.0" />
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <ChoiceBox prefWidth="150.0" />
+                  <ChoiceBox fx:id="colorBlindChoiceBox" prefWidth="150.0" />
                </children>
             </StackPane>
          </children>
