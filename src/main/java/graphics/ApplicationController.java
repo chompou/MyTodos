@@ -87,6 +87,20 @@ public class ApplicationController {
     @FXML
     void onDeleteTasks(ActionEvent event) {
 
+        Object controller = new DeleteController(taskRegistry, this);
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytododelete.fxml"));
+        loader.setController(controller);
+        try{
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
