@@ -1,6 +1,10 @@
 package graphics;
 
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -18,7 +22,7 @@ import mytodos.TaskRegistry;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TaskApplicationController {
     private TaskRegistry taskRegistry;
@@ -91,6 +95,7 @@ public class TaskApplicationController {
             e.printStackTrace();
         }
     }
+
     private void openTaskEditorStage(TaskEditorController controller) {
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodotask.fxml"));
         loader.setController(controller);
@@ -203,7 +208,8 @@ public class TaskApplicationController {
         Toggle selectedToggle = toggleGroup1.getSelectedToggle();
         if (selectedToggle != null) {
             int index = toggleGroup1.getToggles().indexOf(selectedToggle);
-            status = 2 - index;
+            if (index != 3)
+                status = 2 - index;
         }
 
         if (!searchTextField.getText().equals("")) {

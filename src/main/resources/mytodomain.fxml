@@ -44,6 +44,7 @@
                   </ToggleButton>
                   <ToggleButton fx:id="inProgressToggleButton" mnemonicParsing="false" text="In Progress" toggleGroup="$toggleGroup1" />
                   <ToggleButton fx:id="todoToggleButton" mnemonicParsing="false" text="TODO" toggleGroup="$toggleGroup1" />
+                  <ToggleButton fx:id="allToggleButton" mnemonicParsing="false" text="All" toggleGroup="$toggleGroup1" />
                </buttons>
                <BorderPane.margin>
                   <Insets left="2.0" />
