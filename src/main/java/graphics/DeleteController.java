@@ -138,9 +138,7 @@ public class DeleteController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         deadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
-        statusColumn.setCellValueFactory(cellData -> Bindings.createStringBinding(() -> {
-            return Task.statuses[cellData.getValue().getStatus()];
-        }, cellData.getValue().statusProperty()));
+        statusColumn.setCellValueFactory(cellData -> Bindings.stringValueAt(Task.statuses, cellData.getValue().statusProperty()));
 
         selectedColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));

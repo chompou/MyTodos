@@ -3,14 +3,16 @@ package mytodos;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Task implements Serializable {
-    final public static String[] priorities = new String[]{"High", "Medium", "Low"};
-    final public static String[] statuses = new String[]{"TODO", "In Progress", "Completed"};
+    final public static ObservableList<String> priorities = FXCollections.observableArrayList("High", "Medium", "Low");
+    final public static ObservableList<String> statuses = FXCollections.observableArrayList("TODO", "In Progress", "Completed");
 
     private SimpleStringProperty description;
     private SimpleStringProperty category;
@@ -65,19 +67,11 @@ public class Task implements Serializable {
     }
 
     public void setPriority(String priority) {
-        for (int i = 0; i < priorities.length; i++) {
-            if (priorities[i].equals(priority)){
-                setPriority(i);
-            }
-        }
+        setPriority(priorities.indexOf(priority));
     }
 
     public void setStatus(String status) {
-        for (int i = 0; i < statuses.length; i++) {
-            if (statuses[i].equals(status)){
-                setStatus(i);
-            }
-        }
+        setStatus(status.indexOf(status));
     }
 
     public String getDescription() {

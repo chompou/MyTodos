@@ -22,6 +22,7 @@ import mytodos.TaskRegistry;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class TaskApplicationController {
@@ -171,9 +172,8 @@ public class TaskApplicationController {
         descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         categoryColumn.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
         deadlineColumn.setCellValueFactory(cellData -> cellData.getValue().deadlineProperty());
-        priorityColumn.setCellValueFactory(cellData -> Bindings.createStringBinding(() -> {
-            return Task.priorities[cellData.getValue().getPriority()];
-        }, cellData.getValue().priorityProperty()));
+        priorityColumn.setCellValueFactory(cellData -> Bindings.stringValueAt(Task.priorities, cellData.getValue().priorityProperty()));
+        priorityColumn.setComparator(Comparator.comparingInt(Task.priorities::indexOf));
 
         statusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));
