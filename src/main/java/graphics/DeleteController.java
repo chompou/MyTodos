@@ -90,11 +90,11 @@ public class DeleteController {
             isSelected.put(task, false);
         }
 
-        taskTable.setRowFactory( tv -> new TableRow<>());
+
 
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
 
-        selectedColumn = new TableColumn<>("Status");
+        selectedColumn = new TableColumn<>("Selected");
 
         Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<>() {
             @Override
