@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import mytodos.Task;
 import mytodos.TaskRegistry;
 
 public class SettingsController {
@@ -39,6 +40,12 @@ public class SettingsController {
     @FXML
     void onApply(ActionEvent event) {
 
+        if (getDarkThemeChoice(darkModeChoiceBox)) {
+            TaskApplication.getPrimaryStage().getScene().getStylesheets().add("DarkTheme.css");
+        } else {
+            TaskApplication.getPrimaryStage().getScene().getStylesheets().clear();
+        }
+        closeStage(event);
     }
 
     @FXML
@@ -64,7 +71,16 @@ public class SettingsController {
     }
 
     void setTextSizeChoiceBox() {
-        textSizeChoiceBox.getItems().addAll(8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 22);
-        textSizeChoiceBox.setValue(11);
+        textSizeChoiceBox.getItems().addAll(8, 12, 14, 16, 22);
+        textSizeChoiceBox.setValue(12);
+    }
+
+    int getSizeChoice(ChoiceBox<Integer> choiceBox) {
+        return choiceBox.getValue();
+    }
+
+    boolean getDarkThemeChoice(ChoiceBox<String> choiceBox) {
+        String theme = choiceBox.getValue();
+        return theme.equals("Yes");
     }
 }
