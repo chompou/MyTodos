@@ -1,24 +1,32 @@
 package graphics;
 
 import enums.TaskPriority;
+import enums.TaskStatus;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
+import mytodos.Task;
 import mytodos.TaskRegistry;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static enums.TaskPriority.HIGH;
 
 public class DeleteController {
     final private TaskRegistry taskRegistry;
     final private ApplicationController controller;
+    private FilteredList<Task> filteredTasks;
+    private HashMap<Task, Boolean> isSelected;
 
     @FXML
     private TextField searchTextField;
@@ -33,22 +41,22 @@ public class DeleteController {
     private Button SelectAllButton;
 
     @FXML
-    private TableView<?> taskTable;
+    private TableView<Task> taskTable;
 
     @FXML
-    private TableColumn<?, ?> selectedColumn;
+    private TableColumn<Task, Void> selectedColumn;
 
     @FXML
-    private TableColumn<?, ?> descriptionColumn;
+    private TableColumn<Task, String> descriptionColumn;
 
     @FXML
-    private TableColumn<?, ?> categoryColumn;
+    private TableColumn<Task, String> categoryColumn;
 
     @FXML
-    private TableColumn<?, ?> deadlineColumn;
+    private TableColumn<Task, LocalDate> deadlineColumn;
 
     @FXML
-    private TableColumn<?, ?> statusColumn;
+    private TableColumn<Task, String> statusColumn;
 
     @FXML
     private Button DeleteByCategoriesButton;
@@ -63,13 +71,97 @@ public class DeleteController {
     public DeleteController(TaskRegistry taskRegistry, ApplicationController controller) {
         this.taskRegistry = taskRegistry;
         this.controller = controller;
+
+    }
+
+    void updateFilter() {
+        String search = null;
+        if (!searchTextField.getText().equals("")) {
+            search = searchTextField.getText();
+        }
+        filteredTasks.setPredicate(TaskRegistry.filterPredicate(null, search, null));
     }
 
     @FXML
     void initialize() {
         List<String> mappedPriorities = Arrays.stream(TaskPriority.values()).map(TaskPriority::getValue).collect(Collectors.toList());
         ObservableList<String> taskPriorities = FXCollections.observableArrayList(mappedPriorities);
+
+        updateTable();
+
+        isSelected = new HashMap<>();
+        for (Task task: taskRegistry.getTasks()) {
+            isSelected.put(task, false);
+        }
+
+        taskTable.setRowFactory( tv -> new TableRow<>());
+
+        searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
+
+        selectedColumn = new TableColumn<Task, Void>("Status");
+
+        Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<TableColumn<Task, Void>, TableCell<Task, Void>>() {
+            @Override
+            public TableCell<Task, Void> call(final TableColumn<Task, Void> taskVoidTableColumn) {
+                final TableCell<Task, Void> cell = new TableCell<Task, Void>() {
+                    CheckBox checkBox = new CheckBox();
+                    {
+                        checkBox.setAllowIndeterminate(false);
+                        checkBox.setOnAction((ActionEvent event) -> {
+                            Task newTask = getTableView().getItems().get(getIndex());
+
+                            if (isSelected.get(newTask)){
+                                isSelected.put(newTask, false);
+                            } else {
+                                isSelected.put(newTask, true);
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            Task task = getTableView().getItems().get(getIndex());
+                            checkBox.setSelected(isSelected.get(task));
+                            setGraphic(checkBox);
+                        }
+                    }
+                };
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        };
+
+        selectedColumn.setCellFactory(cellFactory);
+        taskTable.getColumns().add(0, selectedColumn);
+
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        deadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getPriority().getValue()));
+
+        selectedColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
+        descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));
+        categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
+        deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.18));
+        statusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.12));
     }
+
+    void updateTable() {
+        ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
+        filteredTasks = new FilteredList<>(observableTasks);
+        SortedList<Task> sortedTasks = new SortedList<>(filteredTasks);
+        sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
+        taskTable.setItems(sortedTasks);
+
+    }
+
+
 
     @FXML
     void onCancelButton(ActionEvent event) {
