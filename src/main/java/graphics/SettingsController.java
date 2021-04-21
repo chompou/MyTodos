@@ -10,10 +10,10 @@ import mytodos.TaskRegistry;
 
 public class SettingsController {
 
-    private final ApplicationController controller;
+    private final TaskApplicationController controller;
     private final TaskRegistry taskRegistry;
 
-    SettingsController(ApplicationController controller, TaskRegistry taskRegistry) {
+    SettingsController(TaskApplicationController controller, TaskRegistry taskRegistry) {
         this.controller = controller;
         this.taskRegistry = taskRegistry;
     }

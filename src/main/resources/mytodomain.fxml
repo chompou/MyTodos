@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,20 +17,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Label?>
-<SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <items>
       <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
          <center>
             <TableView fx:id="taskTable" BorderPane.alignment="CENTER">
                <placeholder>
-                  <Label text=""/>
+                  <Label text="" />
                </placeholder>
               <columns>
-                <TableColumn fx:id="descriptionColumn" editable="false" prefWidth="116.0" text="Description" />
-                <TableColumn fx:id="categoryColumn" editable="false" prefWidth="76.0" text="Category" />
-                  <TableColumn fx:id="deadlineColumn" editable="false" prefWidth="108.0" text="Deadline" />
-                  <TableColumn fx:id="priorityColumn" editable="false" minWidth="0.0" prefWidth="38.0" text="Priority" />
+                  <TableColumn fx:id="statusColumn" editable="false" text="Status" />
+                <TableColumn fx:id="descriptionColumn" editable="false" text="Description" />
+                <TableColumn fx:id="categoryColumn" editable="false" text="Category" />
+                  <TableColumn fx:id="deadlineColumn" editable="false" text="Deadline" />
+                  <TableColumn fx:id="priorityColumn" editable="false" text="Priority" />
               </columns>
             </TableView>
          </center>
@@ -39,7 +40,8 @@
                   <ToggleButton fx:id="completedToggleButton" mnemonicParsing="false" text="Completed">
                      <toggleGroup>
                         <ToggleGroup fx:id="toggleGroup1" />
-                     </toggleGroup></ToggleButton>
+                     </toggleGroup>
+                  </ToggleButton>
                   <ToggleButton fx:id="inProgressToggleButton" mnemonicParsing="false" text="In Progress" toggleGroup="$toggleGroup1" />
                   <ToggleButton fx:id="todoToggleButton" mnemonicParsing="false" text="TODO" toggleGroup="$toggleGroup1" />
                </buttons>
@@ -57,27 +59,27 @@
                      <children>
                         <Button fx:id="createTaskButton" mnemonicParsing="false" onAction="#onTaskCreate">
                            <graphic>
-                              <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@plus.png" />
+                                    <Image url="@add.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                         </Button>
                         <Button fx:id="deleteTasksButton" mnemonicParsing="false" onAction="#onDeleteTasks">
                            <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@bin.png" />
+                                    <Image url="@delete.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                         </Button>
                         <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#onSettings">
                            <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@cog.jpg" />
+                                    <Image url="@settings.png" />
                                  </image>
                               </ImageView>
                            </graphic>
