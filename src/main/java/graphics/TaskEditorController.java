@@ -1,25 +1,20 @@
 package graphics;
 
-import enums.TaskPriority;
-import enums.TaskStatus;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import mytodos.Task;
 import mytodos.TaskRegistry;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class TaskEditorController {
-    final private Task task;
-    final private TaskRegistry taskRegistry;
-    final private ApplicationController controller;
+    boolean newTask;
+    Task task;
+    TaskRegistry taskRegistry;
 
     @FXML
     private TextField descriptionTextField;
@@ -42,107 +37,67 @@ public class TaskEditorController {
     @FXML
     private Button cancelChange;
 
-    TaskEditorController(ApplicationController controller, TaskRegistry taskRegistry) {
-        this.controller = controller;
+
+    TaskEditorController(TaskRegistry taskRegistry) {
+        this.task = new Task();
         this.taskRegistry = taskRegistry;
-        this.task = null;
+        this.newTask = true;
 
     }
 
-    TaskEditorController(ApplicationController controller, TaskRegistry taskRegistry, Task task) {
-        this.controller = controller;
-        this.taskRegistry = taskRegistry;
+    TaskEditorController(TaskRegistry taskRegistry, Task task) {
         this.task = task;
-    }
+        this.taskRegistry = taskRegistry;
+        this.newTask = false;
 
-    @FXML
-    void initialize() {
-        List<String> mappedPriorities = Arrays.stream(TaskPriority.values()).map(TaskPriority::getValue).collect(Collectors.toList());
-        ObservableList<String> taskPriorities = FXCollections.observableArrayList(mappedPriorities);
-        priorityChoiceBox.setItems(taskPriorities);
-
-        if (task != null) {
-            descriptionTextField.setText(task.getDescription());
-            categoryTextField.setText(task.getCategory());
-            deadlineDatePicker.setValue(task.getDeadline());
-            priorityChoiceBox.setValue(task.getPriority().getValue());
-            statusChoiceBox.setValue(task.getStatus().getValue());
-            startDatePicker.setValue(task.getStartDate());
-            endDatePicker.setValue(task.getEndDate());
-            addSaveTask.setText("Save");
-
-        } else {
-            descriptionTextField.setText(null);
-            categoryTextField.setText(null);
-            deadlineDatePicker.setValue(null);
-            priorityChoiceBox.setValue(null);
-            statusChoiceBox.setValue(null);
-            startDatePicker.setValue(LocalDate.now());
-            endDatePicker.setValue(null);
-            deleteTask.setVisible(false);
-        }
     }
 
     void closeStage(ActionEvent event) {
         ((Node)(event.getSource())).getScene().getWindow().hide();
     }
 
-    Task createTaskFromFields(boolean readSecondaryInputs) {
-        String description = descriptionTextField.getText();
-        String category = categoryTextField.getText();
-        LocalDate deadline = deadlineDatePicker.getValue();
-        TaskPriority priority = TaskPriority.byValue(priorityChoiceBox.getValue());
+    @FXML
+    void initialize() {
+        priorityChoiceBox.setItems(FXCollections.observableArrayList(Task.priorities));
 
-        String redBorderStyle = "-fx-text-box-border: red ;\n-fx-focus-color: red ;\n-fx-border-color: red ;";
-
-        if (description == null || category == null || priority == null) {
-            if (description == null);
-                descriptionTextField.setStyle(redBorderStyle);
-            if (category == null);
-               categoryTextField.setStyle(redBorderStyle);
-            if (priority == null);
-                priorityChoiceBox.setStyle(redBorderStyle);
-            return null;
-        }
-
-        Task newTask = new Task(description, category, deadline, priority);
-        if (readSecondaryInputs) {
-            newTask.setStatus(TaskStatus.byValue(statusChoiceBox.getValue()));
-            newTask.setStartDate(startDatePicker.getValue());
-            newTask.setEndDate(endDatePicker.getValue());
-        }
-        return newTask;
-    }
-
-    void onAddTask(ActionEvent event) {
-        Task newTask = createTaskFromFields(false);
-        if (newTask != null){
-            taskRegistry.registerTask(newTask);
-            this.controller.updateTable();
-            taskRegistry.writeTasksToFile();
-            closeStage(event);
-        }
-    }
-
-    void onSaveTask(ActionEvent event) {
-        Task newTask = createTaskFromFields(true);
-        if (newTask != null) {
-            taskRegistry.updateTask(task, newTask);
-            this.controller.updateTable();
-            taskRegistry.writeTasksToFile();
-            closeStage(event);
-        }
+        descriptionTextField.setText(task.getDescription());
+        categoryTextField.setText(task.getCategory());
+        deadlineDatePicker.setValue(task.getDeadline());
+        priorityChoiceBox.setValue(Task.priorities[task.getPriority()]);
+        statusChoiceBox.setValue(Task.statuses[task.getStatus()]);
+        startDatePicker.setValue(task.getStartDate());
+        endDatePicker.setValue(task.getEndDate());
 
     }
 
     @FXML
     void onAddSaveTask(ActionEvent event) {
-        if (task != null){
-            onSaveTask(event);
-        } else {
-            onAddTask(event);
+        boolean missingFields = false;
+        if (descriptionTextField.getText() == null) {
+            descriptionTextField.setPromptText("Required Field");
+            descriptionTextField.setStyle("-fx-border-color: red; -fx-border-width: 2;");
+            missingFields = true;
+        } if (categoryTextField.getText() == null) {
+            categoryTextField.setPromptText("Required Field");
+            categoryTextField.setStyle("-fx-border-color: red; -fx-border-width: 2;");
+            missingFields = true;
         }
 
+        if (missingFields)
+            return;
+
+        task.setDescription(descriptionTextField.getText());
+        task.setCategory(categoryTextField.getText());
+        task.setDeadline(deadlineDatePicker.getValue());
+        task.setPriority(priorityChoiceBox.getValue());
+        task.setStatus(statusChoiceBox.getValue());
+        task.setStartDate(startDatePicker.getValue());
+        task.setEndDate(endDatePicker.getValue());
+
+        if (newTask)
+            taskRegistry.registerTask(task);
+
+        closeStage(event);
     }
 
     @FXML
@@ -152,9 +107,12 @@ public class TaskEditorController {
 
     @FXML
     void onDeleteTask(ActionEvent event) {
-        taskRegistry.deleteTask(this.task);
-        this.controller.updateTable();
-        taskRegistry.writeTasksToFile();
+        taskRegistry.removeTask(task);
         closeStage(event);
     }
+
+
+
+
+
 }

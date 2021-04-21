@@ -1,8 +1,6 @@
 package graphics;
 
-import enums.TaskPriority;
-import enums.TaskStatus;
-import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -17,14 +15,11 @@ import mytodos.Task;
 import mytodos.TaskRegistry;
 
 import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static enums.TaskPriority.HIGH;
+import java.util.HashMap;
 
 public class DeleteController {
     final private TaskRegistry taskRegistry;
-    final private ApplicationController controller;
+    final private TaskApplicationController controller;
     private FilteredList<Task> filteredTasks;
     private HashMap<Task, Boolean> isSelected;
 
@@ -68,7 +63,7 @@ public class DeleteController {
     private Button DeleteButton;
 
 
-    public DeleteController(TaskRegistry taskRegistry, ApplicationController controller) {
+    public DeleteController(TaskRegistry taskRegistry, TaskApplicationController controller) {
         this.taskRegistry = taskRegistry;
         this.controller = controller;
 
@@ -84,8 +79,9 @@ public class DeleteController {
 
     @FXML
     void initialize() {
-        List<String> mappedPriorities = Arrays.stream(TaskPriority.values()).map(TaskPriority::getValue).collect(Collectors.toList());
-        ObservableList<String> taskPriorities = FXCollections.observableArrayList(mappedPriorities);
+        // ## Code snippet now unusable due to TaskPriority enum being removed
+        // List<String> mappedPriorities = Arrays.stream(TaskPriority.values()).map(TaskPriority::getValue).collect(Collectors.toList());
+        // ObservableList<String> taskPriorities = FXCollections.observableArrayList(mappedPriorities);
 
         updateTable();
 
@@ -98,12 +94,12 @@ public class DeleteController {
 
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
 
-        selectedColumn = new TableColumn<Task, Void>("Status");
+        selectedColumn = new TableColumn<>("Status");
 
-        Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<TableColumn<Task, Void>, TableCell<Task, Void>>() {
+        Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<Task, Void> call(final TableColumn<Task, Void> taskVoidTableColumn) {
-                final TableCell<Task, Void> cell = new TableCell<Task, Void>() {
+                final TableCell<Task, Void> cell = new TableCell<>() {
                     CheckBox checkBox = new CheckBox();
                     {
                         checkBox.setAllowIndeterminate(false);
@@ -142,8 +138,9 @@ public class DeleteController {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         deadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        statusColumn.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getPriority().getValue()));
+        statusColumn.setCellValueFactory(cellData -> Bindings.createStringBinding(() -> {
+            return Task.statuses[cellData.getValue().getStatus()];
+        }, cellData.getValue().statusProperty()));
 
         selectedColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));
