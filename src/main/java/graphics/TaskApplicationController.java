@@ -173,6 +173,7 @@ public class TaskApplicationController {
         categoryColumn.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
         deadlineColumn.setCellValueFactory(cellData -> cellData.getValue().deadlineProperty());
         priorityColumn.setCellValueFactory(cellData -> Bindings.stringValueAt(Task.priorities, cellData.getValue().priorityProperty()));
+
         priorityColumn.setComparator(Comparator.comparingInt(Task.priorities::indexOf));
 
         statusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
@@ -185,6 +186,8 @@ public class TaskApplicationController {
         sortedTasks = new SortedList<>(filteredTasks);
         sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
         taskTable.setItems(sortedTasks);
+
+        categoryFilterChoiceBox.setOnShowing(event -> categoryFilterChoiceBox.setItems(taskRegistry.getCategories()));
 
         toggleGroup1.selectedToggleProperty().addListener(button -> updateFilter());
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());

@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class represents the list of tasks created by the user.
@@ -51,6 +52,14 @@ public class TaskRegistry {
      */
     public Task getTask(int index) {
         return this.tasks.get(index);
+    }
+
+    /**
+     * Maps all current tasks in the registry into a set of unique category strings. Intended for ChoiceBox and ComboBox displays
+     * @return An ObservableList with the mapped category strings.
+     */
+    public ObservableList<String> getCategories() {
+        return FXCollections.observableArrayList(this.tasks.stream().map(Task::getCategory).collect(Collectors.toSet()));
     }
 
     /**
