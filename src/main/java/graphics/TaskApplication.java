@@ -24,7 +24,7 @@ public class TaskApplication extends Application {
         loader.setController(new TaskApplicationController());
         Parent root = loader.load();
         Scene scene = new Scene(root, 600 ,400);
-        scene.getStylesheets().add("DarkTheme.css");
+        scene.getStylesheets().add("DefaultTheme.css");
         scene.getStylesheets().clear();
         stage.setScene(scene);
         stage.show();
