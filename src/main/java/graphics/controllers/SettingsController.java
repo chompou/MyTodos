@@ -1,22 +1,18 @@
-package graphics;
+package graphics.controllers;
 
+import graphics.Settings;
+import graphics.TaskApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.layout.BorderPane;
-import mytodos.Task;
 import mytodos.TaskRegistry;
 
-public class SettingsController {
+public class SettingsController extends Controller{
 
-    private final TaskApplicationController controller;
-    private final TaskRegistry taskRegistry;
-
-    SettingsController(TaskApplicationController controller, TaskRegistry taskRegistry) {
-        this.controller = controller;
-        this.taskRegistry = taskRegistry;
+    public SettingsController(TaskRegistry taskRegistry, Settings settings) {
+        super(taskRegistry, settings);
     }
 
     void closeStage(ActionEvent event) {
@@ -75,12 +71,16 @@ public class SettingsController {
     }
 
     void setTextSizeChoiceBox() {
-        textSizeChoiceBox.getItems().addAll(8, 10, 11, 12, 14, 16, 18, 22, 26, 30);
+        textSizeChoiceBox.getItems().addAll(8, 12, 14, 16, 22);
         textSizeChoiceBox.setValue(12);
     }
 
-    boolean getDarkThemeChoice(ChoiceBox<String> darkModeChoiceBox) {
-        String theme = darkModeChoiceBox.getValue();
+    int getSizeChoice(ChoiceBox<Integer> choiceBox) {
+        return choiceBox.getValue();
+    }
+
+    boolean getDarkThemeChoice(ChoiceBox<String> choiceBox) {
+        String theme = choiceBox.getValue();
         return theme.equals("Yes");
     }
 }

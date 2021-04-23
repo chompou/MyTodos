@@ -1,5 +1,6 @@
-package graphics;
+package graphics.controllers;
 
+import graphics.Settings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -7,10 +8,9 @@ import javafx.scene.control.*;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 
-public class TaskEditorController {
+public class TaskEditorController extends Controller{
     boolean newTask;
     Task task;
-    TaskRegistry taskRegistry;
 
     @FXML
     private TextField descriptionTextField;
@@ -34,16 +34,16 @@ public class TaskEditorController {
     private Button cancelChange;
 
 
-    TaskEditorController(TaskRegistry taskRegistry) {
+    TaskEditorController(TaskRegistry taskRegistry, Settings settings) {
+        super(taskRegistry, settings);
         this.task = new Task();
-        this.taskRegistry = taskRegistry;
         this.newTask = true;
 
     }
 
-    TaskEditorController(TaskRegistry taskRegistry, Task task) {
+    TaskEditorController(TaskRegistry taskRegistry, Settings settings, Task task) {
+        super(taskRegistry, settings);
         this.task = task;
-        this.taskRegistry = taskRegistry;
         this.newTask = false;
 
     }

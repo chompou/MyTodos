@@ -1,21 +1,15 @@
-package graphics;
+package graphics.controllers;
 
-import javafx.beans.Observable;
+import graphics.Settings;
+import graphics.factories.StageFactory;
 import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import mytodos.Task;
 import mytodos.TaskRegistry;
@@ -23,10 +17,8 @@ import mytodos.TaskRegistry;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
-public class TaskApplicationController {
-    private TaskRegistry taskRegistry;
+public class TaskApplicationController extends Controller {
     private FilteredList<Task> filteredTasks;
     private SortedList<Task> sortedTasks;
 
@@ -57,65 +49,43 @@ public class TaskApplicationController {
     @FXML
     private ChoiceBox<String> categoryFilterChoiceBox;
 
-    @FXML
-    void onTaskCreate(ActionEvent event) {
-        openTaskEditorStage(new TaskEditorController(taskRegistry));
+    public TaskApplicationController(TaskRegistry taskRegistry, Settings settings) {
+        super(taskRegistry, settings);
     }
 
     @FXML
-    void onDeleteTasks(ActionEvent event) {
-        DeleteController controller = new DeleteController(taskRegistry, this);
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytododelete.fxml"));
-        loader.setController(controller);
-        try{
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void onTaskCreate(ActionEvent event) throws IOException {
+        Controller controller = new TaskEditorController(taskRegistry, settings);
+        StageFactory.createStage("/mytodotask.fxml", controller).show();
+    }
+
+    @FXML
+    void onDeleteTasks(ActionEvent event) throws IOException {
+        DeleteController controller = new DeleteController(taskRegistry, settings);
+        StageFactory.createStage("/mytododelete.fxml", controller).show();
 
     }
 
     @FXML
-    void onSettings(ActionEvent event) {
-        SettingsController controller = new SettingsController(this, taskRegistry);
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodosettings.fxml"));
-        loader.setController(controller);
-        try {
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void onSettings(ActionEvent event) throws IOException {
+        SettingsController controller = new SettingsController(taskRegistry, settings);
+        StageFactory.createStage("/mytodosettings.fxml", controller).show();
     }
 
-    private void openTaskEditorStage(TaskEditorController controller) {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodotask.fxml"));
-        loader.setController(controller);
-        try {
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    @FXML
+    void onTableViewMousePressed(MouseEvent event) throws IOException {
+        if (event.isPrimaryButtonDown() && (event.getClickCount() == 2)) {
+            Task task = taskTable.getSelectionModel().getSelectedItem();
+            if (task != null) {
+                Controller controller = new TaskEditorController(taskRegistry, settings, task);
+                StageFactory.createStage("/mytodotask.fxml", controller).show();
+            }
+
         }
     }
 
     @FXML
     void initialize() {
-        this.taskRegistry = new TaskRegistry();
-
         Callback<TableColumn<Task, Void>, TableCell<Task, Void>> statusCellFactory = new Callback<>() {
             @Override
             public TableCell<Task, Void> call(final TableColumn<Task, Void> taskVoidTableColumn) {
@@ -182,7 +152,7 @@ public class TaskApplicationController {
         deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.18));
         priorityColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.12));
 
-        filteredTasks = new FilteredList<>(this.taskRegistry.getTasks());
+        filteredTasks = new FilteredList<>(taskRegistry.getTasks());
         sortedTasks = new SortedList<>(filteredTasks);
         sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
         taskTable.setItems(sortedTasks);
@@ -192,14 +162,6 @@ public class TaskApplicationController {
         toggleGroup1.selectedToggleProperty().addListener(button -> updateFilter());
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
         categoryFilterChoiceBox.valueProperty().addListener(event -> updateFilter());
-
-        taskTable.setOnMousePressed(mouseEvent -> {
-            if (mouseEvent.isPrimaryButtonDown() && (mouseEvent.getClickCount() == 2)) {
-                Task task = taskTable.getSelectionModel().getSelectedItem();
-                if (task != null)
-                    openTaskEditorStage(new TaskEditorController(taskRegistry, task));
-            }
-        });
 
     }
 

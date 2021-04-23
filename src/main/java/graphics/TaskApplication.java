@@ -1,10 +1,11 @@
 package graphics;
 
+import graphics.controllers.Controller;
+import graphics.controllers.TaskApplicationController;
+import graphics.factories.StageFactory;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
+import mytodos.TaskRegistry;
 
 public class TaskApplication extends Application {
     private static Stage primaryStage;
@@ -13,20 +14,18 @@ public class TaskApplication extends Application {
         TaskApplication.primaryStage = stage;
     }
 
-    static Stage getPrimaryStage() {
+    public static Stage getPrimaryStage() {
         return TaskApplication.primaryStage;
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         setPrimaryStage(stage);
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/mytodomain.fxml"));
-        loader.setController(new TaskApplicationController());
-        Parent root = loader.load();
-        Scene scene = new Scene(root, 600 ,400);
-        scene.getStylesheets().add("DefaultTheme.css");
-        scene.getStylesheets().clear();
-        stage.setScene(scene);
+        TaskRegistry taskRegistry = new TaskRegistry();
+        Settings settings = new Settings();
+        Controller controller = new TaskApplicationController(taskRegistry, settings);
+
+        stage.setScene(StageFactory.createStage("/mytodomain.fxml", controller).getScene());
         stage.show();
     }
 

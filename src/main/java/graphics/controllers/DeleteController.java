@@ -1,5 +1,6 @@
-package graphics;
+package graphics.controllers;
 
+import graphics.Settings;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,9 +18,7 @@ import mytodos.TaskRegistry;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-public class DeleteController {
-    final private TaskRegistry taskRegistry;
-    final private TaskApplicationController controller;
+public class DeleteController extends Controller {
     private FilteredList<Task> filteredTasks;
     private HashMap<Task, Boolean> isSelected;
 
@@ -62,12 +61,10 @@ public class DeleteController {
     @FXML
     private Button DeleteButton;
 
-
-    public DeleteController(TaskRegistry taskRegistry, TaskApplicationController controller) {
-        this.taskRegistry = taskRegistry;
-        this.controller = controller;
-
+    public DeleteController(TaskRegistry taskRegistry, Settings settings) {
+        super(taskRegistry, settings);
     }
+
 
     void updateFilter() {
         String search = null;
