@@ -2,7 +2,11 @@ package graphics.controllers;
 
 import graphics.Settings;
 import graphics.factories.StageFactory;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -17,6 +21,7 @@ import mytodos.TaskRegistry;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.concurrent.Callable;
 
 public class TaskApplicationController extends Controller {
     private FilteredList<Task> filteredTasks;
@@ -86,6 +91,8 @@ public class TaskApplicationController extends Controller {
 
     @FXML
     void initialize() {
+
+        // A custom cell factory for creating a column to three-state checkboxes for managing task statuses
         Callback<TableColumn<Task, Void>, TableCell<Task, Void>> statusCellFactory = new Callback<>() {
             @Override
             public TableCell<Task, Void> call(final TableColumn<Task, Void> taskVoidTableColumn) {
@@ -94,6 +101,9 @@ public class TaskApplicationController extends Controller {
 
                     {
                         checkBox.setAllowIndeterminate(true);
+
+                        // Triggers whenever a checkbox is clicked by the user
+                        // Updates the task associated with the row with the new status and potential end date
                         checkBox.setOnAction((ActionEvent event) -> {
                             Task task = getTableView().getItems().get(getIndex());
                             boolean indeterminate = checkBox.isIndeterminate();
@@ -112,6 +122,8 @@ public class TaskApplicationController extends Controller {
                         });
                     }
 
+                    // Triggers whenever rows are (re)loaded and checkboxes get rendered
+                    // Ensures each checkbox matches the tasks current status
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -144,8 +156,10 @@ public class TaskApplicationController extends Controller {
         deadlineColumn.setCellValueFactory(cellData -> cellData.getValue().deadlineProperty());
         priorityColumn.setCellValueFactory(cellData -> Bindings.stringValueAt(Task.priorities, cellData.getValue().priorityProperty()));
 
+        // Column comparator must be overwritten as it will sort by the string values by default
         priorityColumn.setComparator(Comparator.comparingInt(Task.priorities::indexOf));
 
+        // Ensures every column occupies the same width, regardless of how big the scene is
         statusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));
         categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
@@ -157,12 +171,30 @@ public class TaskApplicationController extends Controller {
         sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
         taskTable.setItems(sortedTasks);
 
-        categoryFilterChoiceBox.setOnShowing(event -> categoryFilterChoiceBox.setItems(taskRegistry.getCategories()));
+        // Updates the priority choice box every time a task is added, removed or a category is edited
+        // Binds the existing ObservableList of tasks in a second list with a listener specifically for category updates
+        Callback<Task, Observable[]> callback = task -> new Observable[] {task.categoryProperty()};
+        ObservableList<Task> categoryListener = FXCollections.observableArrayList(callback);
+        categoryListener.addListener((ListChangeListener<? super Task>) change -> updateCategories());
+        Bindings.bindContentBidirectional(categoryListener, taskRegistry.getTasks());
 
         toggleGroup1.selectedToggleProperty().addListener(button -> updateFilter());
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
         categoryFilterChoiceBox.valueProperty().addListener(event -> updateFilter());
 
+    }
+
+    private void updateCategories() {
+        ObservableList<String> categoryList = taskRegistry.getCategories();
+
+        String oldValue = categoryFilterChoiceBox.getValue();
+        String newValue = "All categories";
+        if (oldValue != null && categoryList.contains(oldValue))
+            newValue = oldValue;
+
+        categoryList.add(0, "All categories");
+        categoryFilterChoiceBox.setItems(categoryList);
+        categoryFilterChoiceBox.setValue(newValue);
     }
 
     private void updateFilter() {
