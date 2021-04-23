@@ -8,6 +8,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
@@ -16,6 +17,8 @@ import mytodos.TaskRegistry;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class DeleteController {
     final private TaskRegistry taskRegistry;
@@ -156,11 +159,14 @@ public class DeleteController {
 
     }
 
+    void closeStage(ActionEvent event) {
+        ((Node)(event.getSource())).getScene().getWindow().hide();
+    }
 
 
     @FXML
     void onCancelButton(ActionEvent event) {
-
+        closeStage(event);
     }
 
     @FXML
@@ -175,18 +181,27 @@ public class DeleteController {
 
     @FXML
     void onSelectAllButton(ActionEvent event) {
-
+        isSelected.replaceAll((task, selected) -> true);
+        taskTable.refresh();
     }
 
     @FXML
     void onSelectAllCompletedButton(ActionEvent event) {
-
+        Iterator<Map.Entry<Task, Boolean>> it = isSelected.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry<Task, Boolean> entry = it.next();
+            if(entry.getKey().getStatus()==2){
+                isSelected.put(entry.getKey(), true);
+            }
+        }
+        taskTable.refresh();
     }
 
     @FXML
 
     void onUnselectAllButton(ActionEvent event) {
-
+        isSelected.replaceAll((task, selected) -> false);
+        taskTable.refresh();
     }
 
 }
