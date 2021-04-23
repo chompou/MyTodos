@@ -1,4 +1,4 @@
-image: maven:3-jdk-11-slim
+image: maven:3-adoptopenjdk-14
 
 junit:
   stage: test
