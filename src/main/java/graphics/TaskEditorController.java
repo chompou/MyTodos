@@ -1,13 +1,9 @@
 package graphics;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 
@@ -19,7 +15,7 @@ public class TaskEditorController {
     @FXML
     private TextField descriptionTextField;
     @FXML
-    private TextField categoryTextField;
+    private ComboBox<String> categoryComboBox;
     @FXML
     private DatePicker deadlineDatePicker;
     @FXML
@@ -58,10 +54,11 @@ public class TaskEditorController {
 
     @FXML
     void initialize() {
-        priorityChoiceBox.setItems(FXCollections.observableArrayList(Task.priorities));
+        categoryComboBox.setItems(taskRegistry.getCategories());
+        priorityChoiceBox.setItems(Task.priorities);
 
         descriptionTextField.setText(task.getDescription());
-        categoryTextField.setText(task.getCategory());
+        categoryComboBox.setValue(task.getCategory());
         deadlineDatePicker.setValue(task.getDeadline());
         priorityChoiceBox.setValue(Task.priorities.get(task.getPriority()));
         statusChoiceBox.setValue(Task.statuses.get(task.getStatus()));
@@ -77,9 +74,9 @@ public class TaskEditorController {
             descriptionTextField.setPromptText("Required Field");
             descriptionTextField.setStyle("-fx-border-color: red; -fx-border-width: 2;");
             missingFields = true;
-        } if (categoryTextField.getText() == null) {
-            categoryTextField.setPromptText("Required Field");
-            categoryTextField.setStyle("-fx-border-color: red; -fx-border-width: 2;");
+        } if (categoryComboBox.getValue() == null) {
+            categoryComboBox.setPromptText("Required Field");
+            categoryComboBox.setStyle("-fx-border-color: red; -fx-border-width: 2;");
             missingFields = true;
         }
 
@@ -87,7 +84,7 @@ public class TaskEditorController {
             return;
 
         task.setDescription(descriptionTextField.getText());
-        task.setCategory(categoryTextField.getText());
+        task.setCategory(categoryComboBox.getValue());
         task.setDeadline(deadlineDatePicker.getValue());
         task.setPriority(priorityChoiceBox.getValue());
         task.setStatus(statusChoiceBox.getValue());
