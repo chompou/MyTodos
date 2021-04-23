@@ -14,5 +14,7 @@ public abstract class Controller {
 
     abstract void initialize();
 
-
+    public Settings getSettings() {
+        return settings;
+    }
 }

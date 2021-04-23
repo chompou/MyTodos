@@ -3,8 +3,8 @@ package graphics;
 import java.io.*;
 
 public class Settings {
-    private boolean darkTheme;
-    private int textSize;
+    private boolean darkTheme = false;
+    private int textSize = 12;
 
     public boolean isDarkTheme() {
         return darkTheme;
