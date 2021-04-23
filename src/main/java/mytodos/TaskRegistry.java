@@ -79,7 +79,7 @@ public class TaskRegistry {
     /**
      * Removes a single task from the registry by first matching object
      * @param task The Task object to be removed
-     * @return true if task was successfully removed, false if it was nto
+     * @return true if task was successfully removed, false if it was not
      */
     public boolean removeTask(Task task) {
         return this.tasks.remove(task);
