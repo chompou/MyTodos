@@ -54,6 +54,11 @@ public class TaskEditorController extends Controller{
 
     @FXML
     void initialize() {
+        if (newTask)
+            deleteTask.setVisible(false);
+        else
+            addSaveTask.setText("Save");
+
         categoryComboBox.setItems(taskRegistry.getCategories());
         priorityChoiceBox.setItems(Task.priorities);
 

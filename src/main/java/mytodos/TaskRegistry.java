@@ -125,7 +125,7 @@ public class TaskRegistry {
 
 
     /**
-     * This method creates a predicate for filtering a collection of tasks according to three provided arguments
+     * Creates a predicate for filtering a collection of tasks according to three provided arguments
      * @param status a TaskStatus to filter statuses
      * @param search a search string to filter descriptions. the string will be matched as a case insensitive substring of any matching descriptions
      * @param category a string to filter categories. the string may be case insensitive, but must otherwise match.
