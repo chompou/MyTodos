@@ -52,25 +52,6 @@ public class SettingsController extends Controller{
         TaskApplication.getPrimaryStage().getScene().lookup(".root").setStyle("-fx-font-size:" + textSizeChoiceBox.getValue() + "px;");
         settings.setTextSize(textSizeChoiceBox.getValue());
 
-        if (textSizeChoiceBox.getValue() > 15) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Warning");
-            alert.setHeaderText("Text size warning");
-            alert.setContentText("Changing text size is an experimental feature. Changing it too much can result in some glitches or bugs. \n" +
-                                 "By hitting cancel you will reset text size to default value.\n \n " +
-                                 "Click OK to proceed");
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
-                settings.saveSettings();
-                closeStage(event);
-            } else {
-                TaskApplication.getPrimaryStage().getScene().lookup(".root").setStyle("-fx-font-size:" + 12 + "px;");
-                settings.saveSettings();
-                closeStage(event);
-            }
-        }
-
         settings.saveSettings();
         closeStage(event);
     }
@@ -85,11 +66,14 @@ public class SettingsController extends Controller{
         setDarkModeChoiceBox();
         setColorBlindChoiceBox();
         setTextSizeChoiceBox();
+        textSizeChoiceBox.valueProperty().addListener( (v, oldVal, newVal) -> alertBox().showAndWait());
     }
 
     void setDarkModeChoiceBox() {
         darkModeChoiceBox.getItems().addAll("No", "Yes");
-        darkModeChoiceBox.setValue("No");
+        if (settings.isDarkTheme()) {
+            darkModeChoiceBox.setValue("Yes");
+        } else darkModeChoiceBox.setValue("No");
     }
 
     void setColorBlindChoiceBox() {
@@ -97,9 +81,25 @@ public class SettingsController extends Controller{
         colorBlindChoiceBox.setValue("Off");
     }
 
+    Alert alertBox() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Text size warning");
+        alert.setContentText("Changing text size is an experimental feature. Changing it too much can result in some glitches or bugs. \n" +
+                "By hitting cancel you will reset text size to default value.\n \n " +
+                "Click OK to proceed");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() != ButtonType.OK) {
+            TaskApplication.getPrimaryStage().getScene().lookup(".root").setStyle("-fx-font-size:" + 12 + "px;");
+        }
+        return alert;
+    }
+
+
     void setTextSizeChoiceBox() {
         textSizeChoiceBox.getItems().addAll(8, 12, 14, 16, 22);
-        textSizeChoiceBox.setValue(12);
+        textSizeChoiceBox.setValue(settings.getTextSize());
     }
 
     int getSizeChoice(ChoiceBox<Integer> choiceBox) {
