@@ -2,7 +2,7 @@ package graphics;
 
 import java.io.*;
 
-public class Settings {
+public class Settings implements Serializable {
     private boolean darkTheme = false;
     private int textSize = 12;
 
