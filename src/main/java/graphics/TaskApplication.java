@@ -22,7 +22,7 @@ public class TaskApplication extends Application {
     public void start(Stage stage) throws Exception {
         setPrimaryStage(stage);
         TaskRegistry taskRegistry = new TaskRegistry();
-        Settings settings = new Settings();
+        Settings settings = Settings.loadSettings();
         Controller controller = new TaskApplicationController(taskRegistry, settings);
 
         stage.setScene(StageFactory.createStage("/mytodomain.fxml", controller).getScene());

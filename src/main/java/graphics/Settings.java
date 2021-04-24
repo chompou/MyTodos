@@ -36,7 +36,9 @@ public class Settings implements Serializable {
         try (FileInputStream fs = new FileInputStream("settings.todo")) {
             ObjectInputStream os = new ObjectInputStream(fs);
             settings = (Settings) os.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
+            return new Settings();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
