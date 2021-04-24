@@ -1,6 +1,7 @@
 package graphics.controllers;
 
 import graphics.Settings;
+import graphics.factories.StageFactory;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import javafx.util.Callback;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -167,12 +169,14 @@ public class DeleteController extends Controller {
     }
 
     @FXML
-    void onDeleteButton(ActionEvent event) {
-
+    void onDeleteButton(ActionEvent event) throws IOException {
+        ConfirmDeleteController controller = new ConfirmDeleteController(taskRegistry, settings, isSelected, this);
+        StageFactory.createStage("/mytodoconfirmdelete.fxml",controller).show();
     }
 
     @FXML
     void onDeleteByCategoriesButton(ActionEvent event) {
+
 
     }
 
