@@ -5,9 +5,13 @@ import graphics.TaskApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import mytodos.TaskRegistry;
+
+import java.util.Optional;
 
 public class SettingsController extends Controller{
 
@@ -39,12 +43,35 @@ public class SettingsController extends Controller{
 
         if (getDarkThemeChoice(darkModeChoiceBox)) {
             TaskApplication.getPrimaryStage().getScene().getStylesheets().add("DarkTheme.css");
+            settings.setDarkTheme(true);
         } else {
             TaskApplication.getPrimaryStage().getScene().getStylesheets().clear();
+            settings.setDarkTheme(false);
         }
 
         TaskApplication.getPrimaryStage().getScene().lookup(".root").setStyle("-fx-font-size:" + textSizeChoiceBox.getValue() + "px;");
+        settings.setTextSize(textSizeChoiceBox.getValue());
 
+        if (textSizeChoiceBox.getValue() > 15) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Text size warning");
+            alert.setContentText("Changing text size is an experimental feature. Changing it too much can result in some glitches or bugs. \n" +
+                                 "By hitting cancel you will reset text size to default value.\n \n " +
+                                 "Click OK to proceed");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                settings.saveSettings();
+                closeStage(event);
+            } else {
+                TaskApplication.getPrimaryStage().getScene().lookup(".root").setStyle("-fx-font-size:" + 12 + "px;");
+                settings.saveSettings();
+                closeStage(event);
+            }
+        }
+
+        settings.saveSettings();
         closeStage(event);
     }
 
