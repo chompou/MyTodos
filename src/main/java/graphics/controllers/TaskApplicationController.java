@@ -2,6 +2,7 @@ package graphics.controllers;
 
 import graphics.Settings;
 import graphics.factories.StageFactory;
+import graphics.factories.StatusCellFactory;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -21,7 +22,6 @@ import mytodos.TaskRegistry;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.concurrent.Callable;
 
 public class TaskApplicationController extends Controller {
     private FilteredList<Task> filteredTasks;
@@ -91,66 +91,7 @@ public class TaskApplicationController extends Controller {
 
     @FXML
     void initialize() {
-
-        // A custom cell factory for creating a column to three-state checkboxes for managing task statuses
-        Callback<TableColumn<Task, Void>, TableCell<Task, Void>> statusCellFactory = new Callback<>() {
-            @Override
-            public TableCell<Task, Void> call(final TableColumn<Task, Void> taskVoidTableColumn) {
-                final TableCell<Task, Void> cell = new TableCell<>() {
-                    CheckBox checkBox = new CheckBox();
-
-                    {
-                        checkBox.setAllowIndeterminate(true);
-
-                        // Triggers whenever a checkbox is clicked by the user
-                        // Updates the task associated with the row with the new status and potential end date
-                        checkBox.setOnAction((ActionEvent event) -> {
-                            Task task = getTableView().getItems().get(getIndex());
-                            boolean indeterminate = checkBox.isIndeterminate();
-                            boolean selected = checkBox.isSelected();
-                            if (!indeterminate && selected)
-                                task.setStatus(2);
-                            if (indeterminate && !selected)
-                                task.setStatus(1);
-                            if (!indeterminate && !selected)
-                                task.setStatus(0);
-
-                            if (task.getStatus() == 2)
-                                task.setEndDate(LocalDate.now());
-                            else
-                                task.setEndDate(null);
-                        });
-                    }
-
-                    // Triggers whenever rows are (re)loaded and checkboxes get rendered
-                    // Ensures each checkbox matches the tasks current status
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            Task task = getTableView().getItems().get(getIndex());
-                            if (task.getStatus() == 2){
-                                checkBox.setIndeterminate(false);
-                                checkBox.setSelected(true);
-                            } else if (task.getStatus() == 1) {
-                                checkBox.setIndeterminate(true);
-                                checkBox.setSelected(false);
-                            } else {
-                                checkBox.setIndeterminate(false);
-                                checkBox.setSelected(false);
-                            }
-                            setGraphic(checkBox);
-                        }
-                    }
-                };
-                cell.setAlignment(Pos.CENTER);
-                return cell;
-            }
-        };
-
-        statusColumn.setCellFactory(statusCellFactory);
+        statusColumn.setCellFactory(new StatusCellFactory());
         descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         categoryColumn.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
         deadlineColumn.setCellValueFactory(cellData -> cellData.getValue().deadlineProperty());
