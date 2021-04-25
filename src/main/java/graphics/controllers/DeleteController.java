@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 
 public class DeleteController extends Controller {
     private FilteredList<Task> filteredTasks;
@@ -169,9 +170,22 @@ public class DeleteController extends Controller {
     }
 
     @FXML
-    void onDeleteButton(ActionEvent event) throws IOException {
-        ConfirmDeleteController controller = new ConfirmDeleteController(taskRegistry, settings, isSelected, this);
-        StageFactory.createStage("/mytodoconfirmdelete.fxml",controller).show();
+    void onDeleteButton(ActionEvent event){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Comfirm Delete");
+        alert.setHeaderText("Are you sure you wish to delete tasks.");
+        alert.setContentText("This action cannot be undone");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if(result.get() == ButtonType.OK){
+            for (Task task: isSelected.keySet()) {
+                if(isSelected.get(task)){
+                    taskRegistry.removeTask(task);
+                }
+            }
+            closeStage(event);
+        }
+
     }
 
     @FXML
