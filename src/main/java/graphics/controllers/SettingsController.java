@@ -19,10 +19,6 @@ public class SettingsController extends Controller{
         super(taskRegistry, settings);
     }
 
-    void closeStage(ActionEvent event) {
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-    }
-
     @FXML
     private Button applyButton;
 

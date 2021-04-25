@@ -48,10 +48,6 @@ public class TaskEditorController extends Controller{
 
     }
 
-    void closeStage(ActionEvent event) {
-        ((Node)(event.getSource())).getScene().getWindow().hide();
-    }
-
     @FXML
     void initialize() {
         if (newTask)
