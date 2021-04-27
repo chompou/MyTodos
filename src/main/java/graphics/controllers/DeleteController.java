@@ -59,7 +59,7 @@ public class DeleteController extends Controller {
     private TableColumn<Task, String> statusColumn;
 
     @FXML
-    private Button DeleteByCategoriesButton;
+    private ChoiceBox<String> selectByCategoriesChoiceBox;
 
     @FXML
     private Button CancelButton;
@@ -148,7 +148,14 @@ public class DeleteController extends Controller {
         categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
         deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.18));
         statusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.12));
+
+        ObservableList<String> categoryList = taskRegistry.getCategories();
+        categoryList.add(0, "All Categories");
+
+        selectByCategoriesChoiceBox.setItems(categoryList);
+        selectByCategoriesChoiceBox.setValue("All Categories");
     }
+
 
     void updateTable() {
         ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
@@ -168,9 +175,9 @@ public class DeleteController extends Controller {
     @FXML
     void onDeleteButton(ActionEvent event){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Comfirm Delete");
-        alert.setHeaderText("Are you sure you wish to delete tasks.");
-        alert.setContentText("This action cannot be undone");
+        alert.setTitle("Comfirm Delete?");
+        alert.setHeaderText("Are you sure you wish to delete tasks?");
+        alert.setContentText("This action cannot be undone.");
         Optional<ButtonType> result = alert.showAndWait();
 
         if(result.get() == ButtonType.OK){
@@ -185,7 +192,18 @@ public class DeleteController extends Controller {
     }
 
     @FXML
-    void onDeleteByCategoriesButton(ActionEvent event) {
+    void onSelectByCategories(ActionEvent event) {
+        if (!selectByCategoriesChoiceBox.getValue().equals("All Categories")){
+            String category = selectByCategoriesChoiceBox.getValue();
+            Iterator<Map.Entry<Task, Boolean>> it = isSelected.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry<Task, Boolean> entry = it.next();
+                if(entry.getKey().getCategory().equals(category)){
+                    isSelected.put(entry.getKey(), true);
+                }
+            }
+            taskTable.refresh();
+        }
 
 
     }
@@ -213,6 +231,7 @@ public class DeleteController extends Controller {
     void onUnselectAllButton(ActionEvent event) {
         isSelected.replaceAll((task, selected) -> false);
         taskTable.refresh();
+        selectByCategoriesChoiceBox.setValue("All Categories");
     }
 
 }
