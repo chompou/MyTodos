@@ -11,19 +11,20 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <items>
       <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
          <center>
             <TableView fx:id="taskTable" onMousePressed="#onTableViewMousePressed" BorderPane.alignment="CENTER">
                <placeholder>
-                  <Label/>
+                  <Label />
                </placeholder>
               <columns>
                   <TableColumn fx:id="statusColumn" editable="false" text="Status" />
@@ -41,10 +42,22 @@
                      <toggleGroup>
                         <ToggleGroup fx:id="toggleGroup1" />
                      </toggleGroup>
+                     <tooltip>
+                        <Tooltip text="Filter by completed" />
+                     </tooltip>
                   </ToggleButton>
-                  <ToggleButton fx:id="inProgressToggleButton" mnemonicParsing="false" text="In Progress" toggleGroup="$toggleGroup1" />
-                  <ToggleButton fx:id="todoToggleButton" mnemonicParsing="false" text="TODO" toggleGroup="$toggleGroup1" />
-                  <ToggleButton fx:id="allToggleButton" mnemonicParsing="false" text="All" toggleGroup="$toggleGroup1" />
+                  <ToggleButton fx:id="inProgressToggleButton" mnemonicParsing="false" text="In Progress" toggleGroup="$toggleGroup1">
+                     <tooltip>
+                        <Tooltip text="Filter by in progress" />
+                     </tooltip></ToggleButton>
+                  <ToggleButton fx:id="todoToggleButton" mnemonicParsing="false" text="TODO" toggleGroup="$toggleGroup1">
+                     <tooltip>
+                        <Tooltip text="Filter by TODO" />
+                     </tooltip></ToggleButton>
+                  <ToggleButton fx:id="allToggleButton" mnemonicParsing="false" text="Filter by all" toggleGroup="$toggleGroup1">
+                     <tooltip>
+                        <Tooltip text="FIlter by all statuses" />
+                     </tooltip></ToggleButton>
                </buttons>
                <BorderPane.margin>
                   <Insets left="2.0" />
@@ -66,6 +79,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Add task" />
+                           </tooltip>
                         </Button>
                         <Button fx:id="deleteTasksButton" mnemonicParsing="false" onAction="#onDeleteTasks">
                            <graphic>
@@ -75,6 +91,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Delete tasks" />
+                           </tooltip>
                         </Button>
                         <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#onSettings">
                            <graphic>
@@ -84,6 +103,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Settings" />
+                           </tooltip>
                         </Button>
                      </children>
                   </HBox>
@@ -91,11 +113,17 @@
                      <VBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </VBox.margin>
+                     <tooltip>
+                        <Tooltip text="Search by description" />
+                     </tooltip>
                   </TextField>
                   <ChoiceBox fx:id="categoryFilterChoiceBox" prefWidth="150.0">
                      <VBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </VBox.margin>
+                     <tooltip>
+                        <Tooltip text="Filter by category" />
+                     </tooltip>
                   </ChoiceBox>
                </children>
                <padding>

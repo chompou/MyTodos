@@ -7,6 +7,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="245.0">
         <columnConstraints>
@@ -42,15 +43,24 @@
                <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="Description" />
+               </tooltip>
             </TextField>
             <DatePicker fx:id="deadlineDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="Deadline" />
+               </tooltip>
             </DatePicker>
             <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <ChoiceBox fx:id="priorityChoiceBox" prefWidth="148.0" />
+                  <ChoiceBox fx:id="priorityChoiceBox" prefWidth="148.0">
+                     <tooltip>
+                        <Tooltip text="Priority" />
+                     </tooltip></ChoiceBox>
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
@@ -72,6 +82,9 @@
                <GridPane.margin>
                   <Insets left="5.0" right="5.0" />
                </GridPane.margin>
+               <tooltip>
+                  <Tooltip text="Category" />
+               </tooltip>
             </ComboBox>
          </children>
       </GridPane>
@@ -79,9 +92,18 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="68.0" prefWidth="245.0" spacing="25.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="addSaveTask" mnemonicParsing="false" onAction="#onAddSaveTask" text="Add" />
-            <Button fx:id="deleteTask" mnemonicParsing="false" onAction="#onDeleteTask" text="Delete" />
-            <Button fx:id="cancelChange" mnemonicParsing="false" onAction="#onCancelChange" text="Cancel" />
+            <Button fx:id="addSaveTask" mnemonicParsing="false" onAction="#onAddSaveTask" text="Add">
+               <tooltip>
+                  <Tooltip text="Add task" />
+               </tooltip></Button>
+            <Button fx:id="deleteTask" mnemonicParsing="false" onAction="#onDeleteTask" text="Delete">
+               <tooltip>
+                  <Tooltip text="Delete task" />
+               </tooltip></Button>
+            <Button fx:id="cancelChange" mnemonicParsing="false" onAction="#onCancelChange" text="Cancel">
+               <tooltip>
+                  <Tooltip text="Cancel" />
+               </tooltip></Button>
          </children>
       </HBox>
    </bottom>
