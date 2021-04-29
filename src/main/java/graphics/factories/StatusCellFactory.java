@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class StatusCellFactory implements Callback<TableColumn<Task, Void>, TableCell<Task, Void>> {
     @Override
     public TableCell<Task, Void> call(TableColumn<Task, Void> taskVoidTableColumn) {
-        final TableCell<Task, Void> cell = new TableCell<>() {
+        final TableCell<Task, Void> cell = new TableCell<Task, Void>() {
             CheckBox checkBox = new CheckBox();
 
             {

@@ -99,10 +99,10 @@ public class DeleteController extends Controller {
 
         selectedColumn = new TableColumn<>("Selected");
 
-        Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<Task, Void>, TableCell<Task, Void>> cellFactory = new Callback<TableColumn<Task, Void>, TableCell<Task, Void>>() {
             @Override
             public TableCell<Task, Void> call(final TableColumn<Task, Void> taskVoidTableColumn) {
-                final TableCell<Task, Void> cell = new TableCell<>() {
+                final TableCell<Task, Void> cell = new TableCell<Task, Void>() {
                     CheckBox checkBox = new CheckBox();
                     {
                         checkBox.setAllowIndeterminate(false);
