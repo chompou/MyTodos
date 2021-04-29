@@ -69,7 +69,7 @@ public class TaskApplicationController extends Controller {
      * @throws IOException
      */
     @FXML
-    void onTaskCreate(ActionEvent event) throws IOException {
+    public void onTaskCreate(ActionEvent event) throws IOException {
         Controller controller = new TaskEditorController(taskRegistry, settings);
         StageFactory.createStage("/mytodotask.fxml", controller).show();
     }
@@ -81,7 +81,7 @@ public class TaskApplicationController extends Controller {
      * @throws IOException
      */
     @FXML
-    void onDeleteTasks(ActionEvent event) throws IOException {
+    public void onDeleteTasks(ActionEvent event) throws IOException {
         DeleteController controller = new DeleteController(taskRegistry, settings);
         StageFactory.createStage("/mytododelete.fxml", controller).show();
 
@@ -94,7 +94,7 @@ public class TaskApplicationController extends Controller {
      * @throws IOException
      */
     @FXML
-    void onSettings(ActionEvent event) throws IOException {
+    public void onSettings(ActionEvent event) throws IOException {
         SettingsController controller = new SettingsController(taskRegistry, settings);
         StageFactory.createStage("/mytodosettings.fxml", controller).show();
     }
@@ -106,7 +106,7 @@ public class TaskApplicationController extends Controller {
      * @throws IOException
      */
     @FXML
-    void onTableViewMousePressed(MouseEvent event) throws IOException {
+    public void onTableViewMousePressed(MouseEvent event) throws IOException {
         if (event.isPrimaryButtonDown() && (event.getClickCount() == 2)) {
             Task task = taskTable.getSelectionModel().getSelectedItem();
             if (task != null) {
@@ -157,7 +157,7 @@ public class TaskApplicationController extends Controller {
      * Updates the category ChoiceBox with a map of categories across the current set of tasks
      * Called when a task has it's category property updated, or is added or removed from the task list.
      */
-    private void updateCategories() {
+    public void updateCategories() {
         ObservableList<String> categoryList = taskRegistry.getCategories();
 
         String oldValue = categoryFilterChoiceBox.getValue();
@@ -174,7 +174,7 @@ public class TaskApplicationController extends Controller {
      * Updates the bound predicate of the filter list, filtering the current TableView according to the filter inputs.
      * Called whenever the value property of any filter input updates.
      */
-    private void updateFilter() {
+    public void updateFilter() {
         Integer status = null;
         String search = null;
         String category = null;

@@ -8,6 +8,9 @@ import javafx.scene.control.*;
 import mytodos.Task;
 import mytodos.TaskRegistry;
 
+/**
+ * A controller for handling setup and logic for the task management window.
+ */
 public class TaskEditorController extends Controller{
     boolean newTask;
     Task task;
@@ -69,7 +72,7 @@ public class TaskEditorController extends Controller{
     }
 
     @FXML
-    void onAddSaveTask(ActionEvent event) {
+    public void onAddSaveTask(ActionEvent event) {
         boolean missingFields = false;
         if (descriptionTextField.getText() == null) {
             descriptionTextField.setPromptText("Required Field");
@@ -99,12 +102,12 @@ public class TaskEditorController extends Controller{
     }
 
     @FXML
-    void onCancelChange(ActionEvent event) {
+    public void onCancelChange(ActionEvent event) {
         closeStage(event);
     }
 
     @FXML
-    void onDeleteTask(ActionEvent event) {
+    public void onDeleteTask(ActionEvent event) {
         taskRegistry.removeTask(task);
         closeStage(event);
     }
