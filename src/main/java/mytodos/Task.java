@@ -44,7 +44,6 @@ public class Task implements Serializable {
         this.endDate = new SimpleObjectProperty<>(null);
     }
 
-    @Serial
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeUTF(getDescription());
         out.writeUTF(getCategory());
@@ -55,7 +54,6 @@ public class Task implements Serializable {
         out.writeObject(getEndDate());
     }
 
-    @Serial
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.description = new SimpleStringProperty(in.readUTF());
         this.category = new SimpleStringProperty(in.readUTF());
