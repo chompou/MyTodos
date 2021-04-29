@@ -15,7 +15,6 @@ public class StatusCellFactory implements Callback<TableColumn<Task, Void>, Tabl
     public TableCell<Task, Void> call(TableColumn<Task, Void> taskVoidTableColumn) {
         final TableCell<Task, Void> cell = new TableCell<Task, Void>() {
             CheckBox checkBox = new CheckBox();
-
             {
                 checkBox.setAllowIndeterminate(true);
 

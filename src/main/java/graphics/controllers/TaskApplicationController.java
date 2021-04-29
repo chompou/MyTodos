@@ -113,7 +113,6 @@ public class TaskApplicationController extends Controller {
                 Controller controller = new TaskEditorController(taskRegistry, settings, task);
                 StageFactory.createStage("/mytodotask.fxml", controller).show();
             }
-
         }
     }
 

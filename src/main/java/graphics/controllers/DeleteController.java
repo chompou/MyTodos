@@ -100,6 +100,7 @@ public class DeleteController extends Controller {
      */
     @FXML
     void initialize() {
+        //Set's the tableView data.
         ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
         filteredTasks = new FilteredList<>(observableTasks);
         SortedList<Task> sortedTasks = new SortedList<>(filteredTasks);
@@ -122,6 +123,8 @@ public class DeleteController extends Controller {
                     CheckBox checkBox = new CheckBox();
                     {
                         checkBox.setAllowIndeterminate(false);
+
+                        //Trigger's when the checkbox is triggered.
                         checkBox.setOnAction((ActionEvent event) -> {
                             Task newTask = getTableView().getItems().get(getIndex());
 
@@ -134,6 +137,7 @@ public class DeleteController extends Controller {
 
                     }
 
+                    //Is called every time the checkbox is loaded.
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -154,20 +158,22 @@ public class DeleteController extends Controller {
         selectedColumn.setCellFactory(cellFactory);
         taskTable.getColumns().add(0, selectedColumn);
 
+        //Set's the cell value factories for the columns.
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         deadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
         statusColumn.setCellValueFactory(cellData -> Bindings.stringValueAt(Task.statuses, cellData.getValue().statusProperty()));
 
+        //Set's the prefered with property of the columns.
         selectedColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.09));
         descriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.4));
         categoryColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.2));
         deadlineColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.18));
         statusColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(0.12));
 
+        //Set's the values for the category list choicebox.
         ObservableList<String> categoryList = taskRegistry.getCategories();
         categoryList.add(0, "All Categories");
-
         selectByCategoriesChoiceBox.setItems(categoryList);
         selectByCategoriesChoiceBox.setValue("All Categories");
     }
