@@ -24,6 +24,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * This class represents the controller for a delete window,
+ * which displays the tasks and let's the user select the ones they wish to delete.
+ * It has a field for the list of tasks it displays for the user to delete
+ * and a field for an HashMap that keeps track of which Tasks are selected.
+ * It inherits from the abstract controller class.
+ */
 public class DeleteController extends Controller {
     private FilteredList<Task> filteredTasks;
     private HashMap<Task, Boolean> isSelected;
@@ -67,11 +74,19 @@ public class DeleteController extends Controller {
     @FXML
     private Button DeleteButton;
 
+    /**
+     * Creates a DeleteController object
+     * @param taskRegistry the taskRegistry the deleteController is deleting from
+     * @param settings The settings the delete controller is using.
+     */
     public DeleteController(TaskRegistry taskRegistry, Settings settings) {
         super(taskRegistry, settings);
     }
 
 
+    /**
+     * Checks if the user is using the text field for searching, and updates the table accordingly.
+     */
     void updateFilter() {
         String search = null;
         if (!searchTextField.getText().equals("")) {
@@ -80,20 +95,21 @@ public class DeleteController extends Controller {
         filteredTasks.setPredicate(TaskRegistry.filterPredicate(null, search, null));
     }
 
+    /**
+     * Initializes the deleteController, defines most of the tableView data, and sets various fields.
+     */
     @FXML
     void initialize() {
-        // ## Code snippet now unusable due to TaskPriority enum being removed
-        // List<String> mappedPriorities = Arrays.stream(TaskPriority.values()).map(TaskPriority::getValue).collect(Collectors.toList());
-        // ObservableList<String> taskPriorities = FXCollections.observableArrayList(mappedPriorities);
-
-        updateTable();
+        ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
+        filteredTasks = new FilteredList<>(observableTasks);
+        SortedList<Task> sortedTasks = new SortedList<>(filteredTasks);
+        sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
+        taskTable.setItems(sortedTasks);
 
         isSelected = new HashMap<>();
         for (Task task: taskRegistry.getTasks()) {
             isSelected.put(task, false);
         }
-
-
 
         searchTextField.textProperty().addListener((obs, oldText, newText) -> updateFilter());
 
@@ -156,22 +172,20 @@ public class DeleteController extends Controller {
         selectByCategoriesChoiceBox.setValue("All Categories");
     }
 
-
-    void updateTable() {
-        ObservableList<Task> observableTasks = FXCollections.observableList(taskRegistry.getTasks());
-        filteredTasks = new FilteredList<>(observableTasks);
-        SortedList<Task> sortedTasks = new SortedList<>(filteredTasks);
-        sortedTasks.comparatorProperty().bind(taskTable.comparatorProperty());
-        taskTable.setItems(sortedTasks);
-
-    }
-
-
+    /**
+     * Closes the stage when the cancel button is pressed.
+     * @param event the event of the cancel button being pressed.
+     */
     @FXML
     void onCancelButton(ActionEvent event) {
         closeStage(event);
     }
 
+    /**
+     * Pulls up a confirmation window when the delete button is pushed.
+     * Deletes the selected tasks if the user answer's yes, and returns to the delete window if not.
+     * @param event the event of the user pressing the delete button.
+     */
     @FXML
     void onDeleteButton(ActionEvent event){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -191,6 +205,10 @@ public class DeleteController extends Controller {
 
     }
 
+    /**
+     * Selects all the tasks of a category when the user selects it from the dropdown menu.
+     * @param event The event of the user clicking the dropdown menu.
+     */
     @FXML
     void onSelectByCategories(ActionEvent event) {
         if (!selectByCategoriesChoiceBox.getValue().equals("All Categories")){
@@ -208,12 +226,20 @@ public class DeleteController extends Controller {
 
     }
 
+    /**
+     * Selects all the tasks when the user clicks the select all button.
+     * @param event The event of the user clicking the select all button.
+     */
     @FXML
     void onSelectAllButton(ActionEvent event) {
         isSelected.replaceAll((task, selected) -> true);
         taskTable.refresh();
     }
 
+    /**
+     * Selects all completed tasks when the user clicks the select all completed button.
+     * @param event The event of the user clicking the select all completed button.
+     */
     @FXML
     void onSelectAllCompletedButton(ActionEvent event) {
         Iterator<Map.Entry<Task, Boolean>> it = isSelected.entrySet().iterator();
@@ -226,8 +252,11 @@ public class DeleteController extends Controller {
         taskTable.refresh();
     }
 
+    /**
+     * Unselects all tasks when the user clicks the unselect all button.
+     * @param event The event of the user clicking the unselect all button.
+     */
     @FXML
-
     void onUnselectAllButton(ActionEvent event) {
         isSelected.replaceAll((task, selected) -> false);
         taskTable.refresh();
