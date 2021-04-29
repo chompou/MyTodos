@@ -10,6 +10,12 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+
+/**
+ * A task object containing helper methods for various JavaFX interaction
+ * Each field is some implementation of the ObservableValue interface. This lets JavaFX bind listeners to it's properties,
+ * and trigger corresponding logic whenever a value is updated.
+ */
 public class Task implements Serializable {
     final public static ObservableList<String> priorities = FXCollections.observableArrayList("High", "Medium", "Low");
     final public static ObservableList<String> statuses = FXCollections.observableArrayList("TODO", "In Progress", "Completed");
@@ -22,6 +28,10 @@ public class Task implements Serializable {
     private SimpleObjectProperty<LocalDate> startDate;
     private SimpleObjectProperty<LocalDate> endDate;
 
+    /**
+     * Returns a functionally blank Task object.
+     * Only priority, status and start date have distinct, default values.
+     */
     public Task() {
         this.description = new SimpleStringProperty(null);
         this.category = new SimpleStringProperty(null);
@@ -33,6 +43,16 @@ public class Task implements Serializable {
         this.endDate = new SimpleObjectProperty<>(null);
     }
 
+
+    /**
+     * Returns a new Task object to be completed.
+     * Intended for testing and development, should not be called in production code
+     *
+     * @param description The description of the task
+     * @param category The category the task belongs to
+     * @param deadline The deadline by which the category should be completed
+     * @param priority The priority of which the category is ranked
+     */
     public Task(String description, String category, LocalDate deadline, int priority) {
         this.description = new SimpleStringProperty(description);
         this.category = new SimpleStringProperty(category);
@@ -44,6 +64,12 @@ public class Task implements Serializable {
         this.endDate = new SimpleObjectProperty<>(null);
     }
 
+    /**
+     * Serializes and writes the current Task object through an output stream.
+     * Should not be called manually, used by the Serializable extension to save the task list.
+     * @param out An output stream where the object should be written to
+     * @throws IOException
+     */
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeUTF(getDescription());
         out.writeUTF(getCategory());
@@ -54,6 +80,13 @@ public class Task implements Serializable {
         out.writeObject(getEndDate());
     }
 
+    /**
+     * Reads and instantiates a serialized Task object from an input stream.
+     * Should not be called manually, used by the Serializable extension to load the task list.
+     * @param in An input stream where the serialized data should be read from
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.description = new SimpleStringProperty(in.readUTF());
         this.category = new SimpleStringProperty(in.readUTF());
@@ -64,10 +97,18 @@ public class Task implements Serializable {
         this.endDate = new SimpleObjectProperty<>((LocalDate) in.readObject());
     }
 
+    /**
+     * Sets the task priority from a human-readable string
+     * @param priority The priority string corresponding to an priority integer
+     */
     public void setPriority(String priority) {
         setPriority(priorities.indexOf(priority));
     }
 
+    /**
+     * Sets the task status from a human-readable string
+     * @param status The status string corresponding to a status integer
+     */
     public void setStatus(String status) {
         setStatus(status.indexOf(status));
     }

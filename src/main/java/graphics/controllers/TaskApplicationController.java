@@ -12,7 +12,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
@@ -23,6 +22,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 
+/**
+ * A controller for handling setup and listeners for the main window of the application.
+ * Contains several wrapped ObservableList implementations that gives the embedded TableView it's sorting and filtering characteristics.
+ * Extends the abstract Controller class.
+ */
 public class TaskApplicationController extends Controller {
     private FilteredList<Task> filteredTasks;
     private SortedList<Task> sortedTasks;
@@ -58,12 +62,24 @@ public class TaskApplicationController extends Controller {
         super(taskRegistry, settings);
     }
 
+    /**
+     * Instantiates a task management window with an empty Task object.
+     * Should only be called as a GUI event.
+     * @param event The event that triggered the method
+     * @throws IOException
+     */
     @FXML
     void onTaskCreate(ActionEvent event) throws IOException {
         Controller controller = new TaskEditorController(taskRegistry, settings);
         StageFactory.createStage("/mytodotask.fxml", controller).show();
     }
 
+    /**
+     * Instantiates a task deletion window
+     * Should only be called as a GUI event.
+     * @param event The event that triggered the method
+     * @throws IOException
+     */
     @FXML
     void onDeleteTasks(ActionEvent event) throws IOException {
         DeleteController controller = new DeleteController(taskRegistry, settings);
@@ -71,12 +87,24 @@ public class TaskApplicationController extends Controller {
 
     }
 
+    /**
+     * Instantiates a settings management window
+     * Should only be called as a GUI event.
+     * @param event The event that triggered the method
+     * @throws IOException
+     */
     @FXML
     void onSettings(ActionEvent event) throws IOException {
         SettingsController controller = new SettingsController(taskRegistry, settings);
         StageFactory.createStage("/mytodosettings.fxml", controller).show();
     }
 
+    /**
+     * Instantiates a task management window with a given Task object to be edited
+     * Should only be called as a GUI event.
+     * @param event The event that triggered the method
+     * @throws IOException
+     */
     @FXML
     void onTableViewMousePressed(MouseEvent event) throws IOException {
         if (event.isPrimaryButtonDown() && (event.getClickCount() == 2)) {
@@ -125,6 +153,10 @@ public class TaskApplicationController extends Controller {
 
     }
 
+    /**
+     * Updates the category ChoiceBox with a map of categories across the current set of tasks
+     * Called when a task has it's category property updated, or is added or removed from the task list.
+     */
     private void updateCategories() {
         ObservableList<String> categoryList = taskRegistry.getCategories();
 
@@ -138,6 +170,10 @@ public class TaskApplicationController extends Controller {
         categoryFilterChoiceBox.setValue(newValue);
     }
 
+    /**
+     * Updates the bound predicate of the filter list, filtering the current TableView according to the filter inputs.
+     * Called whenever the value property of any filter input updates.
+     */
     private void updateFilter() {
         Integer status = null;
         String search = null;
