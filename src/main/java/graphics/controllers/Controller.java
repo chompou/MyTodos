@@ -5,6 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import mytodos.TaskRegistry;
 
+/**
+ * An abstract controller class used for implementing into dedicated controller classes
+ */
 public abstract class Controller {
     final TaskRegistry taskRegistry;
     final Settings settings;

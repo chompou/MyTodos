@@ -87,7 +87,7 @@ public class DeleteController extends Controller {
     /**
      * Checks if the user is using the text field for searching, and updates the table accordingly.
      */
-    void updateFilter() {
+    public void updateFilter() {
         String search = null;
         if (!searchTextField.getText().equals("")) {
             search = searchTextField.getText();
@@ -95,9 +95,7 @@ public class DeleteController extends Controller {
         filteredTasks.setPredicate(TaskRegistry.filterPredicate(null, search, null));
     }
 
-    /**
-     * Initializes the deleteController, defines most of the tableView data, and sets various fields.
-     */
+
     @FXML
     void initialize() {
         //Set's the tableView data.
@@ -183,7 +181,7 @@ public class DeleteController extends Controller {
      * @param event the event of the cancel button being pressed.
      */
     @FXML
-    void onCancelButton(ActionEvent event) {
+    public void onCancelButton(ActionEvent event) {
         closeStage(event);
     }
 
@@ -193,7 +191,7 @@ public class DeleteController extends Controller {
      * @param event the event of the user pressing the delete button.
      */
     @FXML
-    void onDeleteButton(ActionEvent event){
+    public void onDeleteButton(ActionEvent event){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Comfirm Delete?");
         alert.setHeaderText("Are you sure you wish to delete tasks?");
@@ -216,7 +214,7 @@ public class DeleteController extends Controller {
      * @param event The event of the user clicking the dropdown menu.
      */
     @FXML
-    void onSelectByCategories(ActionEvent event) {
+    public void onSelectByCategories(ActionEvent event) {
         if (!selectByCategoriesChoiceBox.getValue().equals("All Categories")){
             String category = selectByCategoriesChoiceBox.getValue();
             Iterator<Map.Entry<Task, Boolean>> it = isSelected.entrySet().iterator();
@@ -237,7 +235,7 @@ public class DeleteController extends Controller {
      * @param event The event of the user clicking the select all button.
      */
     @FXML
-    void onSelectAllButton(ActionEvent event) {
+    public void onSelectAllButton(ActionEvent event) {
         isSelected.replaceAll((task, selected) -> true);
         taskTable.refresh();
     }
@@ -247,7 +245,7 @@ public class DeleteController extends Controller {
      * @param event The event of the user clicking the select all completed button.
      */
     @FXML
-    void onSelectAllCompletedButton(ActionEvent event) {
+    public void onSelectAllCompletedButton(ActionEvent event) {
         Iterator<Map.Entry<Task, Boolean>> it = isSelected.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry<Task, Boolean> entry = it.next();
@@ -263,10 +261,9 @@ public class DeleteController extends Controller {
      * @param event The event of the user clicking the unselect all button.
      */
     @FXML
-    void onUnselectAllButton(ActionEvent event) {
+    public void onUnselectAllButton(ActionEvent event) {
         isSelected.replaceAll((task, selected) -> false);
         taskTable.refresh();
         selectByCategoriesChoiceBox.setValue("All Categories");
     }
-
 }

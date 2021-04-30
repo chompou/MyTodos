@@ -12,6 +12,9 @@ import mytodos.TaskRegistry;
 
 import java.util.Optional;
 
+/**
+ * A controller for handling setup and logic for the settings window
+ */
 public class SettingsController extends Controller{
 
     public SettingsController(TaskRegistry taskRegistry, Settings settings) {
@@ -38,7 +41,7 @@ public class SettingsController extends Controller{
      * @param event
      */
     @FXML
-    void onApply(ActionEvent event) {
+    public void onApply(ActionEvent event) {
 
         // Checks what theme is currently selected, and selects the correct theme based on the input
         if (getDarkThemeChoice(darkModeChoiceBox)) {
@@ -63,13 +66,10 @@ public class SettingsController extends Controller{
      * @param event
      */
     @FXML
-    void onCancel(ActionEvent event) {
+    public void onCancel(ActionEvent event) {
         closeStage(event);
     }
 
-    /**
-     * Initializes the settings menu
-     */
     @FXML
     void initialize() {
 
@@ -84,7 +84,7 @@ public class SettingsController extends Controller{
     }
 
     // Setup for darkmode choicebox, Adds options and checks what the current theme is.
-    void setDarkModeChoiceBox() {
+    public void setDarkModeChoiceBox() {
         darkModeChoiceBox.getItems().addAll("No", "Yes");
         if (settings.isDarkTheme()) {
             darkModeChoiceBox.setValue("Yes");
@@ -92,23 +92,23 @@ public class SettingsController extends Controller{
     }
 
     // Adds options to the colorblind choicebox
-    void setColorBlindChoiceBox() {
+    public void setColorBlindChoiceBox() {
         colorBlindChoiceBox.getItems().addAll("Off", "Red-green", "Blue-yellow", "Complete");
         colorBlindChoiceBox.setValue("Off");
     }
     // Adds options to the text size choicebox
-    void setTextSizeChoiceBox() {
+    public void setTextSizeChoiceBox() {
         textSizeChoiceBox.getItems().addAll(8, 12, 14, 16, 22);
         textSizeChoiceBox.setValue(settings.getTextSize());
     }
 
-    boolean getDarkThemeChoice(ChoiceBox<String> choiceBox) {
+    public boolean getDarkThemeChoice(ChoiceBox<String> choiceBox) {
         String theme = choiceBox.getValue();
         return theme.equals("Yes");
     }
 
     // Sets up alert box for text size
-    void textSizeAlertBox() {
+    public void textSizeAlertBox() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Warning");
         alert.setHeaderText("Text size warning");
@@ -123,7 +123,7 @@ public class SettingsController extends Controller{
     }
 
     // Sets up alertbox for colorblind choicebox
-    void colorBlindAlertBox() {
+    public void colorBlindAlertBox() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Important");
         alert.setHeaderText("Important information");
