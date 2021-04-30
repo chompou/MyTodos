@@ -32,10 +32,6 @@ public class SettingsController extends Controller{
 
     @FXML
     private ChoiceBox<Integer> textSizeChoiceBox;
-
-    @FXML
-    private ChoiceBox<String> colorBlindChoiceBox;
-
     /**
      * Method for what happens when the apply button is pressed.
      * @param event
@@ -75,12 +71,10 @@ public class SettingsController extends Controller{
 
         // Sets up the different choiceboxes
         setDarkModeChoiceBox();
-        setColorBlindChoiceBox();
         setTextSizeChoiceBox();
 
-        // Checks for changes in text size choicebox and colorblindness choicebox and sends an alert
+        // Checks for changes in text size choicebox and sends an alert
         textSizeChoiceBox.valueProperty().addListener( (v, oldVal, newVal) -> textSizeAlertBox());
-        colorBlindChoiceBox.valueProperty().addListener( (v, oldVal, newVal) -> colorBlindAlertBox());
     }
 
     // Setup for darkmode choicebox, Adds options and checks what the current theme is.
@@ -89,12 +83,6 @@ public class SettingsController extends Controller{
         if (settings.isDarkTheme()) {
             darkModeChoiceBox.setValue("Yes");
         } else darkModeChoiceBox.setValue("No");
-    }
-
-    // Adds options to the colorblind choicebox
-    public void setColorBlindChoiceBox() {
-        colorBlindChoiceBox.getItems().addAll("Off", "Red-green", "Blue-yellow", "Complete");
-        colorBlindChoiceBox.setValue("Off");
     }
     // Adds options to the text size choicebox
     public void setTextSizeChoiceBox() {
@@ -120,14 +108,5 @@ public class SettingsController extends Controller{
         if (result.get() != ButtonType.OK) {
             TaskApplication.getPrimaryStage().getScene().lookup(".root").setStyle("-fx-font-size:" + 12 + "px;");
         }
-    }
-
-    // Sets up alertbox for colorblind choicebox
-    public void colorBlindAlertBox() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Important");
-        alert.setHeaderText("Important information");
-        alert.setContentText("There are currently no colorblind options available, this feature might become available in the future.");
-        alert.showAndWait();
     }
 }
