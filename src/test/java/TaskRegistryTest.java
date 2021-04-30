@@ -1,10 +1,13 @@
 import mytodos.Task;
 import mytodos.TaskRegistry;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystemException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,12 +31,17 @@ public class TaskRegistryTest {
         taskRegistry.registerTask(task);
     }
 
-    @After
-    public void TearDown() {
+    @AfterClass
+    public static void tearDown() throws IOException {
         File file = new File("tasks.todo");
-        file.delete();
+        while (true) {
+            try {
+                Files.deleteIfExists(file.toPath());
+                break;
+            } catch (FileSystemException e) {
+            }
+        }
     }
-
 
     @Test
     public void writeAndReadTasksTest() {
