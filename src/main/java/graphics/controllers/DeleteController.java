@@ -260,5 +260,4 @@ public class DeleteController extends Controller {
         taskTable.refresh();
         selectByCategoriesChoiceBox.setValue("All Categories");
     }
-
 }
