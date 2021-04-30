@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane fx:id="splitPane" centerShape="false" dividerPositions="0.75" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1">
    <items>
       <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
          <center>
@@ -54,9 +54,9 @@
                      <tooltip>
                         <Tooltip text="Filter by TODO" />
                      </tooltip></ToggleButton>
-                  <ToggleButton fx:id="allToggleButton" mnemonicParsing="false" text="Filter by all" toggleGroup="$toggleGroup1">
+                  <ToggleButton fx:id="allToggleButton" mnemonicParsing="false" text="All" toggleGroup="$toggleGroup1">
                      <tooltip>
-                        <Tooltip text="FIlter by all statuses" />
+                        <Tooltip text="Filter by all statuses" />
                      </tooltip></ToggleButton>
                </buttons>
                <BorderPane.margin>
